@@ -1,0 +1,18 @@
+* outfn
+A macro for simpler, more declarative functions.
+** Features
+*** vanilla/base outfn
+- keyword arguments for clarity of function arguments
+- function dispatch by argument instead of
+- decomplecting order from function arguments
+- 0-overhead function dispatch based on keys
+*** :glossary
+- ensures consistent naming which encourages thinking more about names
+- DRY validation
+*** :implicits
+- declarative programming
+- solves the "big let" problem by breaking the problem down into domain-level concepts
+- could allow for optimizations in the future with batching
+* TODO
+- implement implicits
+- usage examples for each feature
