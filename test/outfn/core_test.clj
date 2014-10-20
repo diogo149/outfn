@@ -6,6 +6,7 @@
   ""
   [foo]
   nil)
+
 (fact "testing single arity outfn"
   (outfn0 :foo 2) => nil
   ;; using eval because it throws a macroexpand time exception

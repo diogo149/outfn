@@ -1,18 +1,33 @@
 * outfn
 A macro for simpler, more declarative functions.
+
+Naming, meaning, and validation shouldn't be separated. Doing so hurts readability and encourages subtle bugs (confusing a variable for a different one because the name is the same) and boilerplace (validating the same name the same way in different places).
+
+By creating a glossary or "concept map", we create a central place for understanding the types of data passing through a system, their meaining, and their names. Forcing you to think about and create this then allows more declarative programming, by implicitly calling these functions leading to simpler, less coupled logic.
 ** Features
 *** vanilla/base outfn
 - keyword arguments for clarity of function arguments
-- function dispatch by argument instead of
+- function dispatch by argument instead of arity
 - decomplecting order from function arguments
 - 0-overhead function dispatch based on keys
+- macroexpand-time validation that a function is called properly
 *** :glossary
 - ensures consistent naming which encourages thinking more about names
 - DRY validation
 *** :implicits
 - declarative programming
 - solves the "big let" problem by breaking the problem down into domain-level concepts
-- could allow for optimizations in the future with batching
+- could allow for optimizations in the future with batching or parallelization
+- easier debugging
+- solves the problem of dependency passing (normal solutions involve explicitly declaring dependencies of all your dependencies or passing an opaque options map; parameters are coupled either way)
+  - eg. x calls y
+    - former:
+      - the arguments of x contain the arguments of y
+      - when changing the logic of y, also have to change x
+    - later:
+      - the arguments of x contains some map containing the arguments of y
+      - in order to understand how x is called, you need to understand y
+- macroexpand-time validation of implicits
 * TODO
 - implement implicits
 - usage examples for each feature
