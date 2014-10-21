@@ -4,6 +4,8 @@ A macro for simpler, more declarative functions.
 Naming, meaning, and validation shouldn't be separated. Doing so hurts readability and encourages subtle bugs (confusing a variable for a different one because the name is the same) and boilerplace (validating the same name the same way in different places).
 
 By creating a glossary or "concept map", we create a central place for understanding the types of data passing through a system, their meaining, and their names. Forcing you to think about and create this then allows more declarative programming, by implicitly calling these functions leading to simpler, less coupled logic.
+
+Let's avoid using the same name to refer to different things and enjoy simpler programming.
 ** Features
 *** vanilla/base outfn
 - keyword arguments for clarity of function arguments
@@ -27,7 +29,11 @@ By creating a glossary or "concept map", we create a central place for understan
     - later:
       - the arguments of x contains some map containing the arguments of y
       - in order to understand how x is called, you need to understand y
-- macroexpand-time validation of implicits
+- macroexpand-time validation of implicits to make sure all the data that is needed is available before the system is running
 * TODO
 - implement implicits
 - usage examples for each feature
+- add metadata to each subfunction
+  - eg. cost to have implicits find the lowest cost route to get an answer
+- add non-macro version
+  - for clojurescript compatibility
