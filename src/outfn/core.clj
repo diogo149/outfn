@@ -1,13 +1,5 @@
 (ns outfn.core)
 
-(defn get-arg-set
-  [[args]]
-  {:pre [(vector? args)
-         (every? symbol? args)
-         (not-any? #{'&} args)]
-   :post [(= (count %) (count args))]}
-  (into (sorted-set) args))
-
 (defn make-fn-name
   [outfn-name arg-set]
   (->> arg-set
@@ -17,13 +9,17 @@
        clojure.string/join
        symbol))
 
+(defn make-dispatch-fn-name
+  [outfn-name]
+  (symbol (str outfn-name "-outfn-dispatch-fn")))
+
 ;; ---------------------------------------------
 ;; TODO add this section to a glossary namespace
 ;; ---------------------------------------------
 
 (defn add-validators?
   []
-  ;; TODO some logic of when to and not to validate
+  ;; TODO some logic of when to and not to create validation for every call
   true)
 
 (defn no-glossary
@@ -56,6 +52,17 @@
 ;; ----------------------
 ;; end glossary namespace
 ;; ----------------------
+
+(defn get-arg-set
+  "takes in the body of a function and returns the arguments to that function
+  as a sorted set
+  eg. (get-arg-set '([foo bar choo] (+ foo bar))) => #{bar choo foo}"
+  [[args]]
+  {:pre [(vector? args)
+         (every? symbol? args)
+         (not-any? #{'&} args)]
+   :post [(= (count %) (count args))]}
+  (into (sorted-set) args))
 
 (defn make-fn-impl
   [glossary fn-name fn-arg-set fn-body]
@@ -112,7 +119,7 @@
                         fn-names
                         fn-arg-sets
                         fn-bodies)
-        dispatch-fn-name (symbol (str outfn-name "-outfn-dispatch-fn"))
+        dispatch-fn-name (make-dispatch-fn-name outfn-name)
         dispatch-fn-doc (format (str "Map for outfn %s from set of keys"
                                      " to function name")
                                 outfn-name)
