@@ -1,6 +1,7 @@
 (ns outfn.implicits
   (:require [loom.graph :as loom]
-            [clojure.set :as set]))
+            loom.alg
+            [slingshot.slingshot :as ss]))
 
 ;; ------------
 ;; computation representation
@@ -59,15 +60,16 @@
       (if-not continue?
         (if-let [output-value (get values output-kw)]
           (:graph output-value)
-          (do (println "VAL" values output-kw)
-            {:error :cannot-be-reached
-             :reachable-nodes reachable-nodes}))
+          {:error :cannot-be-reached
+           :reachable-nodes reachable-nodes})
         (recur (reduce
                 (fn [{:keys [values reachable-nodes] :as acc}
                      {:keys [inputs output cost] :as computation}]
                   (if-not (every? reachable-nodes inputs)
                     acc
                     (let [best-cost (-> values output :cost)
+                          ;; TODO recompute cost from graph here, since the
+                          ;; computed cost is an upper bound
                           current-cost (apply + cost (map #(-> values % :cost)
                                                           inputs))]
                       (if-not (or (nil? best-cost)
@@ -90,7 +92,6 @@
                 (assoc outer-acc :continue? false)
                 computations))))))
 
-;; TODO output a graph of computations that need to be taken
 (defn compute-implicits
   [input-kws output-kw available-computations]
   {:pre [(set? input-kws)
@@ -98,9 +99,36 @@
          (keyword? output-kw)
          ;; TODO validate available-computations
          ]}
-  (let [available-computations (preprocess-computations available-computations)]
-    (greedy-compute-implicits input-kws
-                              output-kw
-                              available-computations)))
+  (let [available-computations (preprocess-computations available-computations)
+        res (greedy-compute-implicits input-kws
+                                      output-kw
+                                      available-computations)]
+    (when (:error res)
+      (ss/throw+ res))
+    res))
 
-;; TODO function that converts graph of computations into clojure code
+;; -------------------------------
+;; generating computation metadata
+;; -------------------------------
+
+(defn generate-serial-order
+  [input-kws output-kw graph]
+  {:pre [(every? keyword? input-kws)
+         (keyword? output-kw)
+         (loom/graph? graph)]}
+  (let [syms (for [s (loom/nodes graph)]
+               (gensym (name s)))
+        computation-order (->> graph
+                               loom.alg/topsort
+                               (remove input-kws)
+                               vec)]
+    (assert (= output-kw (last computation-order))
+            (format "Error occured: Computation order %s doesn't end with %s"
+                    computation-order
+                    output-kw))
+    (mapv (fn [node]
+            [node (->> node
+                       (loom/in-edges graph)
+                       (map loom/src)
+                       set)])
+          computation-order)))

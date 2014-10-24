@@ -33,9 +33,15 @@ Let's avoid using the same name to refer to different things and enjoy simpler p
 - macroexpand-time validation of implicits to make sure all the data that is needed is available before the system is running
 - auto-testing : by having multiple ways to solve for the same thing, a test suite can be automatically run to make sure each way returns the same result
   - TODO
+* Development
+To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
+* NOTES:
 * TODO
 - implement implicits
-- more tests
+  - implicits should take in a set of vars
+- validate output as well
+- more tests / docs
+- prismatic graph for parallel evaluation
 - prismatic schema validation
 - usage examples for each feature
 - add metadata to each subfunction

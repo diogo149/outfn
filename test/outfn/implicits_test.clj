@@ -65,3 +65,15 @@
                       :cost 1
                       :output :bar}]
  (loom/digraph [:foo :bar] :choo))
+
+(tabular
+ (fact
+   "generate serial order"
+   (generate-serial-order input-kws output-kw graph) => result)
+ input-kws output-kw graph result
+
+ #{:bar} :foo (loom/digraph [:bar :foo])
+ [[:foo #{:bar}]]
+
+ #{:a :b} :q (loom/digraph [:a :c] [:b :c] [:c :d] [:d :e] [:e :q])
+ [[:c #{:a :b}] [:d #{:c}] [:e #{:d}] [:q #{:e}]])

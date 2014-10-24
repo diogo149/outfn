@@ -1,15 +1,16 @@
 (ns outfn.core)
 
-(defn make-fn-name
+(defn make-generated-fn-name
   [outfn-name arg-set]
   (->> arg-set
+       sort
        (cons "outfn")
        (cons outfn-name)
        (interpose "-")
        clojure.string/join
        symbol))
 
-(defn make-dispatch-fn-name
+(defn make-dispatch-map-name
   [outfn-name]
   (symbol (str outfn-name "-outfn-dispatch-fn")))
 
@@ -114,21 +115,22 @@
         fn-arg-sets (distinct (map get-arg-set fn-bodies))
         ;; making sure arg-sets are unique
         _ (assert (= (count fn-arg-sets) (count fn-bodies)))
-        fn-names (map #(make-fn-name outfn-name %) fn-arg-sets)
+        fn-names (map #(make-generated-fn-name outfn-name %) fn-arg-sets)
         defn-impls (map (partial make-fn-impl glossary)
                         fn-names
                         fn-arg-sets
                         fn-bodies)
-        dispatch-fn-name (make-dispatch-fn-name outfn-name)
-        dispatch-fn-doc (format (str "Map for outfn %s from set of keys"
-                                     " to function name")
-                                outfn-name)
+        dispatch-map-name (make-dispatch-map-name outfn-name)
+        dispatch-map-doc (format (str "Map for outfn %s from set of keys"
+                                      " to function name")
+                                 outfn-name)
         dispatch-map (make-dispatch-map fn-arg-sets fn-names)
         ;; bind namespace to qualify the dispatched function call in the
         ;; inner macro
         outfn-ns *ns*]
     `(do
-       (def ~dispatch-fn-name ~dispatch-fn-doc '~dispatch-map)
+       (def ~dispatch-map-name ~dispatch-map-doc '~dispatch-map)
+       (println ~dispatch-map-name)
        ~@defn-impls
        (defmacro ~outfn-name
          ~docstring
@@ -139,12 +141,12 @@
                                        "to %s must be a keyword: %s")
                                   '~outfn-name
                                   k#))
-               dispatch-fn-name# (~dispatch-fn-name k#)
+               dispatch-fn-name# (~dispatch-map-name k#)
                _# (assert dispatch-fn-name#
                           (format "Invalid set of keys %s for %s"
                                   k#
                                   '~outfn-name))
                ;; TODO is there a better way to namespace qualify this function
-               dispatched-fn# (symbol (str ~outfn-ns "/" dispatch-fn-name#))
+               dispatched-fn# (symbol (str ~outfn-ns) (str dispatch-fn-name#))
                positional-args# (map args# k#)]
            (cons dispatched-fn# positional-args#))))))
