@@ -38,16 +38,30 @@
                                 :output :bar}]
  (loom/digraph :foo [:choo :bar] [:doo :bar] [:baz :bar])
 
-  #{:foo :choo} :bar [{:inputs #{:foo}
-                       :cost 100
-                       :output :bar}
-                      {:inputs #{:choo}
-                       :cost 1
-                       :output :doo}
-                      {:inputs #{:doo}
-                       :cost 1
-                       :output :baz}
-                      {:inputs #{:baz}
-                       :cost 1
-                       :output :bar}]
- (loom/digraph :foo [:choo :doo] [:doo :baz] [:baz :bar]))
+ #{:foo :choo} :bar [{:inputs #{:foo}
+                      :cost 100
+                      :output :bar}
+                     {:inputs #{:choo}
+                      :cost 1
+                      :output :doo}
+                     {:inputs #{:doo}
+                      :cost 1
+                      :output :baz}
+                     {:inputs #{:baz}
+                      :cost 1
+                      :output :bar}]
+ (loom/digraph :foo [:choo :doo] [:doo :baz] [:baz :bar])
+
+ #{:foo :choo} :bar [{:inputs #{:foo}
+                      :cost 2
+                      :output :bar}
+                     {:inputs #{:choo}
+                      :cost 1
+                      :output :doo}
+                     {:inputs #{:doo}
+                      :cost 1
+                      :output :baz}
+                     {:inputs #{:baz}
+                      :cost 1
+                      :output :bar}]
+ (loom/digraph [:foo :bar] :choo))
