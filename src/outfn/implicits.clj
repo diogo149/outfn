@@ -116,9 +116,7 @@
   {:pre [(every? keyword? input-kws)
          (keyword? output-kw)
          (loom/graph? graph)]}
-  (let [syms (for [s (loom/nodes graph)]
-               (gensym (name s)))
-        computation-order (->> graph
+  (let [computation-order (->> graph
                                loom.alg/topsort
                                (remove input-kws)
                                vec)]
