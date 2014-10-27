@@ -17,21 +17,37 @@ generated functions to dispatch to and their inputs and outputs"}
          (every? keyword? input-kws)
          (ifn? f)]}
   ;; not using util/safe-assoc-in because of re-evaluating code
-  (swap! outfn-state assoc-in [outfn-var input-kws] f)
-  ;; return nil just so that the whole map isn't returned
-  nil)
+  (swap! outfn-state assoc-in [outfn-var :fns input-kws] f))
 
 (defn save-fn-map!
   [fn-map]
   (let [outfn-var (util/safe-get fn-map :outfn-var)
         input-kws (util/safe-get fn-map :input-kws)
         f (util/safe-get fn-map :fn)]
-    ;; TODO save more data
-    (save-fn! outfn-var input-kws f)))
+    (save-fn! outfn-var input-kws f)
+    ;; return nil just so that the whole map isn't returned
+    nil))
+
+(defn save-common-data!
+  [outfn-var common-data-map]
+  {:pre [(var? outfn-var)
+         ;; TODO validate common-data-map
+         ]}
+  (swap! outfn-state assoc-in [outfn-var :common] common-data-map))
 
 (defn get-fn
   [outfn-var input-kws]
   {:pre [(var? outfn-var)
          (set? input-kws)
          (every? keyword? input-kws)]}
-  (get-in @outfn-state [outfn-var input-kws]))
+  (get-in @outfn-state [outfn-var :fns input-kws]))
+
+(defn get-input-sets
+  [outfn-var]
+  {:pre [(var? outfn-var)]}
+  (keys (get-in @outfn-state [outfn-var :fns])))
+
+(defn get-common-data
+  [outfn-var]
+  {:pre [(var? outfn-var)]}
+  (get-in @outfn-state [outfn-var :common]))

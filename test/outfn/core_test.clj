@@ -30,3 +30,26 @@
   (eval '(defoutfn outfn? {}
            "Docstring"
            [foo])) => (throws AssertionError))
+
+(defoutfn foo-fn {:glossary no-glossary
+                  :output :foo}
+  "Docstring"
+  ([a] 3)
+  ([b] 4)
+  ([c d] 5))
+
+(defoutfn bar-fn {:glossary no-glossary
+                  :output :bar
+                  :implicits #{#'foo-fn}}
+  "what's up doc"
+  [foo] foo)
+
+(fact
+  "implicit function call"
+  (bar-fn :foo 2) => 2
+  (bar-fn :a nil) => 3
+  (bar-fn :b 42) => 4
+  (bar-fn :c 11 :d 22) => 5
+  (eval '(bar-fn :c 2)) => (throws Exception)
+  (bar-fn :foo 2 :a 3 :b 4 :c 5 :d 6) => 2
+  (bar-fn :foo 42 :a (throw (Exception.))) => 42)

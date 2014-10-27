@@ -19,6 +19,7 @@ Let's avoid using the same name to refer to different things and enjoy simpler p
 - DRY validation
 *** :implicits
 - declarative programming
+  - TODO show lazy example
 - solves the "big let" problem by breaking the problem down into domain-level concepts
 - could allow for optimizations in the future with batching (group together db calls), parallelization (evaluating the DAG of function calls), or intelligently picking the lowest cost route from the input to the desired data (assigning costs to each function and automatically switching over to a more efficient query)
 - easier debugging
@@ -36,15 +37,18 @@ Let's avoid using the same name to refer to different things and enjoy simpler p
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- implement implicits
-  - implicits should take in a set of vars
+- common data validation
+  - if contains :implicits, must contain :output
 - validate output as well
 - more tests / docs
 - prismatic schema validation
 - prismatic graph for parallel evaluation
 - usage examples for each feature
-- add metadata to each subfunction
-  - eg. cost to have implicits find the lowest cost route to get an answer
+- figure out how to add cost
+  - should each subfunction have its own cost
+    - add metadata to each subfunction
+      - eg. cost to have implicits find the lowest cost route to get an answer
+  - should the toplevel outfn have a cost
 - add non-macro version
   - for clojurescript compatibility
 - better name

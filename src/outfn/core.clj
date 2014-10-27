@@ -2,6 +2,7 @@
   (:require [outfn.analyze :as analyze]
             [outfn.generate :as generate]
             [outfn.glossary :as glossary]
+            [outfn.state :as state]
             [outfn.util :as util]))
 
 (defn defoutfn*
@@ -18,6 +19,7 @@
                                          {:ns *ns*
                                           :outfn-name outfn-name
                                           :outfn-var outfn-var})]
+    (state/save-common-data! outfn-var common-data-map)
     (->> forms
          analyze/read-fns
          (mapv util/safe-merge (repeat common-data-map))
