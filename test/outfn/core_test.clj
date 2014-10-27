@@ -2,12 +2,6 @@
   (:require [midje.sweet :refer :all]
             [outfn.core :refer :all]))
 
-(fact
-  "get-arg-set"
-  (let [arg-set (get-arg-set '([foo bar choo] (+ foo bar)))]
-    arg-set => set?
-    (seq arg-set) => '(bar choo foo)))
-
 (defoutfn outfn0 {:glossary no-glossary}
   ""
   [foo]

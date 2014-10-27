@@ -43,6 +43,7 @@ syms (for [s (loom/nodes graph)]
   - implicits should take in a set of vars
 - validate output as well
 - more tests / docs
+- use something like defnk to make validation DRY
 - prismatic graph for parallel evaluation
 - prismatic schema validation
 - usage examples for each feature
