@@ -35,7 +35,7 @@ A macro for simpler, more declarative functions.
   - No intermediate maps are made.
   - All the work is done at macroexpand-time.
   - Positional argument function calls are generated.
-- macroexpand-time validation that a function is called properly - no waiting for unlucky input needed
+- macroexpand-time validation that a function is called properly - no waiting for (un)lucky input at runtime needed
   #+BEGIN_SRC clojure
     (defoutfn outfn
       "what's up doc"
@@ -43,6 +43,7 @@ A macro for simpler, more declarative functions.
       :foo)
 
     (when nil
+      ;; this doesn't get run
       (outfn :fo 2))
     ;; Error!  Invalid set of keys #{:fo} for #'outfn.core/outfn
   #+END_SRC
@@ -73,9 +74,10 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- common data validation
+- usage examples for each feature
+- common-data-map validation
   - if contains :implicits, must contain :output
-- validate output as well
+- validate output when :output param is given
 - more tests / docs
 - go through all the code TODOs for low hanging fruit, add the rest here
 - prismatic schema validation
@@ -83,7 +85,6 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
   - auto add try-catch for implicits with nice error handling
   - function to generate visualize call graph (w/ loom)
   - prismatic graph for parallel evaluation
-- usage examples for each feature
 - figure out how to add cost
   - should each subfunction have its own cost
     - add metadata to each subfunction
@@ -91,7 +92,7 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
   - should the toplevel outfn have a cost
 - add non-macro version
   - for clojurescript compatibility
-- better name
+- better name (maybe?)
 - use something like defnk to make validation DRY
 - better implicits algorithm
   - problem: how to find the optimal set of calls
