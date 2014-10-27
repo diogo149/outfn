@@ -50,8 +50,31 @@ A macro for simpler, more declarative functions.
 *** Glossary
 Naming, meaning, and validation shouldn't be separated. Doing so hurts readability and encourages subtle bugs (confusing a variable for a different one because the name is the same) and boilerplace (validating the same name the same way in different places). Let's avoid using the same name to refer to different things and enjoy simpler programming.
 
-- encourages consistent naming which encourages thinking more about names
-- DRY validation
+- DRY, non-intrusive validation
+  #+BEGIN_SRC clojure
+    (def a-glossary {:foo {:validator #(= :foo %)}
+                     :choo {:schema {:a {:b s/Int}}}})
+
+    (defoutfn outfn1 {:glossary a-glossary}
+      "Some outfn"
+      ([foo] 3.5)
+      ([choo] :lochness))
+
+    (defoutfn outfn2 {:glossary a-glossary}
+      "Some outfn"
+      ([foo] :hello)
+      ([choo] :world))
+
+    (outfn1 :foo :foo) ;; => 3.5
+    (outfn1 :foo 42) ;; => Error!
+    (outfn1 :choo {:a {:b 3}}) ;; => :lochness
+    (outfn1 :choo {:a {:b "3"}}) ;; => Error!
+    (outfn2 :foo :foo) ;; => :hello
+    (outfn2 :foo :bar) ;; => Error!
+    (outfn2 :choo {:a {:b 3}}) ;; => :world
+    (outfn2 :choo {:a {:b "3"}}) ;; => Error!
+  #+END_SRC
+- encourages consistent naming which encourages thinking more about names (due to the validation)
 *** Implicits
 By creating a glossary or "concept map", we create a central place for understanding the types of data passing through a system, their meaining, and their names. Forcing you to think about and create this then allows more declarative programming, by implicitly calling these functions leading to simpler, less coupled logic.
 
@@ -80,7 +103,6 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
 - validate output when :output param is given
 - more tests / docs
 - go through all the code TODOs for low hanging fruit, add the rest here
-- prismatic schema validation
 - implicits improvements
   - auto add try-catch for implicits with nice error handling
   - function to generate visualize call graph (w/ loom)

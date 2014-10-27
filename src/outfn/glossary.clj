@@ -1,5 +1,10 @@
 (ns outfn.glossary
-  (:require [outfn.util :as util]))
+  (:require [outfn.util :as util]
+            [schema.core :as s]))
+
+(defn input-kw->symbol
+  [input-kw]
+  (symbol (name input-kw)))
 
 ;; -----------------
 ;; adding validation
@@ -15,15 +20,15 @@
 (defn make-validator
   [glossary input-kw]
   {:pre [(keyword? input-kw)]}
-  (let [glossary-entry (glossary input-kw)
+  (let [input-sym (input-kw->symbol input-kw)
+        glossary-entry (glossary input-kw)
         {:keys [validator schema]} glossary-entry]
     (assert glossary-entry (format "Invalid key %s: not in provided glossary"
                                    input-kw))
-    [(when validator
-       (list validator input-kw))
-     (when schema
-       ;; TODO schema validate
-       )]))
+    (remove nil? [(when validator
+                    (list validator input-sym))
+                  (when schema
+                    (list s/validate schema input-sym))])))
 
 (defn add-validators
   [fn-map validators]
@@ -36,5 +41,5 @@
     (let [glossary (util/safe-get fn-map :glossary)
           _ (assert (ifn? glossary) "Glossary must be a function")
           input-kws (util/safe-get fn-map :input-kws)
-          validators (mapv make-validator (repeat glossary) input-kws)]
+          validators (doall (mapcat make-validator (repeat glossary) input-kws))]
       (add-validators fn-map validators))))

@@ -1,6 +1,7 @@
 (ns outfn.core-test
   (:require [midje.sweet :refer :all]
             clojure.repl
+            [schema.core :as s]
             [outfn.core :refer :all]))
 
 ;; ----------
@@ -78,15 +79,39 @@
            "Docstring"
            [foo])) => (throws AssertionError))
 
+(def a-glossary {:foo {:validator #(= :foo %)}
+                 :choo {:schema {:a {:b s/Int}}}})
+
+(defoutfn outfn1 {:glossary a-glossary}
+  "Some outfn"
+  ([foo] 3.5)
+  ([choo] :lochness))
+
+(defoutfn outfn2 {:glossary a-glossary}
+  "Some outfn"
+  ([foo] :hello)
+  ([choo] :world))
+
+(fact
+  "DRY validation"
+  (outfn1 :foo :foo) => 3.5
+  (outfn1 :foo 42) => (throws Throwable)
+  (outfn1 :choo {:a {:b 3}}) => :lochness
+  (outfn1 :choo {:a {:b "3"}}) => (throws Throwable)
+  (outfn2 :foo :foo) => :hello
+  (outfn2 :foo :bar) => (throws Throwable)
+  (outfn2 :choo {:a {:b 3}}) => :world
+  (outfn2 :choo {:a {:b "3"}}) => (throws Throwable))
+
+;; ---------
+;; implicits
+;; ---------
+
 (defoutfn foo-fn {:output :foo}
   "Docstring"
   ([a] 3)
   ([b] 4)
   ([c d] 5))
-
-;; ---------
-;; implicits
-;; ---------
 
 (defoutfn bar-fn {:output :bar
                   :implicits #{#'foo-fn}}
