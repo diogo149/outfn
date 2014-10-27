@@ -4,7 +4,7 @@ A macro for simpler, more declarative functions.
 *** vanilla/base outfn
 - keyword arguments for clarity of function arguments
   #+BEGIN_SRC clojure
-    (outfn :user-map x :password-list y)
+    (do-something :user-map x :password-list y)
   #+END_SRC
 - function dispatch by argument instead of arity
   #+BEGIN_SRC clojure
