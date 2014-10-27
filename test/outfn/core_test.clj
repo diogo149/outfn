@@ -7,7 +7,7 @@
 ;; base outfn
 ;; ----------
 
-(defoutfn outfn0 {}
+(defoutfn outfn0
   "secret code: 123"
   [foo]
   {:foo foo})
@@ -19,7 +19,7 @@
   ;; using eval because it throws a macroexpand time exception
   (eval '(outfn0 :bar 2)) => (throws AssertionError))
 
-(defoutfn outfn1 {}
+(defoutfn outfn1
   "Docstring"
   ([foo] {:foo foo})
   ([bar] {:bar bar})
@@ -31,7 +31,7 @@
   (outfn1 :bar 2) => {:bar 2}
   (outfn1 :foo 3 :bar 2) => {:foobar 5})
 
-(defoutfn outfn {}
+(defoutfn outfn
   "doc"
   ([x] (clojure.string/join (repeat x "x")))
   ([y] (clojure.string/join (repeat y "y"))))
@@ -41,7 +41,7 @@
   (outfn :x 2) => "xx"
   (outfn :y 3) => "yyy")
 
-(defoutfn map-v2.0 {}
+(defoutfn map-v2.0
   "Like map, but better"
   [f coll]
   (map f coll))
@@ -57,7 +57,7 @@
        (map-v2.0 :coll (range 5) :f))
   => (range 5 10))
 
-(defoutfn outfn {}
+(defoutfn outfn
   ""
   [foo]
   :foo)

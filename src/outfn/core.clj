@@ -36,8 +36,12 @@
 
 (defmacro defoutfn
   "TODO docstring"
-  [outfn-name params-quoted docstring & forms]
-  (defoutfn* outfn-name (eval params-quoted) docstring forms))
+  [outfn-name & fdecl]
+  (let [[params-quoted fdecl] (if (string? (first fdecl))
+                                [nil fdecl]
+                                [(first fdecl) (rest fdecl)])
+        [docstring forms] [(first fdecl) (rest fdecl)]]
+    (defoutfn* outfn-name (eval params-quoted) docstring forms)))
 
 ;; -----------------
 ;; sample glossaries

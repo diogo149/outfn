@@ -4,12 +4,12 @@ A macro for simpler, more declarative functions.
 *** vanilla/base outfn
 - keyword arguments for clarity of function arguments
   #+BEGIN_SRC clojure
-    (outfn :x 3 :y 4)
+    (outfn :user-map x :password-list y)
   #+END_SRC
 - function dispatch by argument instead of arity
   #+BEGIN_SRC clojure
-    (defoutfn outfn {}
-      "doc"
+    (defoutfn outfn
+      "what's up doc"
       ([x] (clojure.string/join (repeat x "x")))
       ([y] (clojure.string/join (repeat y "y"))))
 
@@ -18,7 +18,7 @@ A macro for simpler, more declarative functions.
   #+END_SRC
 - decomplecting order from function arguments
   #+BEGIN_SRC clojure
-    (defoutfn map-v2.0 {}
+    (defoutfn map-v2.0
       "Like map, but better"
       [f coll]
       (map f coll))
@@ -34,8 +34,8 @@ A macro for simpler, more declarative functions.
 - 0-overhead function dispatch based on keys
 - macroexpand-time validation that a function is called properly - no waiting for unlucky input needed
   #+BEGIN_SRC clojure
-    (defoutfn outfn {}
-      ""
+    (defoutfn outfn
+      "what's up doc"
       [foo]
       :foo)
 
@@ -43,12 +43,12 @@ A macro for simpler, more declarative functions.
       (outfn :fo 2))
     ;; Error!  Invalid set of keys #{:fo} for #'outfn.core/outfn
   #+END_SRC
-*** :glossary
+*** Glossary
 Naming, meaning, and validation shouldn't be separated. Doing so hurts readability and encourages subtle bugs (confusing a variable for a different one because the name is the same) and boilerplace (validating the same name the same way in different places). Let's avoid using the same name to refer to different things and enjoy simpler programming.
 
-- ensures consistent naming which encourages thinking more about names
+- encourages consistent naming which encourages thinking more about names
 - DRY validation
-*** :implicits
+*** Implicits
 By creating a glossary or "concept map", we create a central place for understanding the types of data passing through a system, their meaining, and their names. Forcing you to think about and create this then allows more declarative programming, by implicitly calling these functions leading to simpler, less coupled logic.
 
 - declarative programming
@@ -70,11 +70,11 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- make map and docstring optional
 - common data validation
   - if contains :implicits, must contain :output
 - validate output as well
 - more tests / docs
+- go through all the code TODOs for low hanging fruit, add the rest here
 - prismatic schema validation
 - implicits improvements
   - auto add try-catch for implicits with nice error handling
@@ -99,3 +99,6 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
     - [[http://mvnrepository.com/artifact/org.optaplanner][maven optaplanner]]
     - [[https://github.com/droolsjbpm/optaplanner][optaplanner github]]
     - [[http://www.optaplanner.org/learn/documentation.html][optaplanner docs]]
+** Won't-s
+- make both docstring and params optional
+  - because there can be ambiguity between the params and the functions
