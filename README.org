@@ -32,6 +32,9 @@ A macro for simpler, more declarative functions.
          (map-v2.0 :coll (range 5) :f)) ;; (5 6 7 8 9)
   #+END_SRC
 - 0-overhead function dispatch based on keys
+  - No intermediate maps are made.
+  - All the work is done at macroexpand-time.
+  - Positional argument function calls are generated.
 - macroexpand-time validation that a function is called properly - no waiting for unlucky input needed
   #+BEGIN_SRC clojure
     (defoutfn outfn
