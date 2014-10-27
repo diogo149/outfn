@@ -17,6 +17,20 @@ A macro for simpler, more declarative functions.
     (outfn :y 3) ;; "yyy"
   #+END_SRC
 - decomplecting order from function arguments
+  #+BEGIN_SRC clojure
+    (defoutfn map-v2.0 {}
+      "Like map, but better"
+      [f coll]
+      (map f coll))
+
+    (->> 5
+         range
+         (map-v2.0 :f inc :coll)) ;; (1 2 3 4 5)
+
+    (->> 5
+         (partial +)
+         (map-v2.0 :coll (range 5) :f)) ;; (5 6 7 8 9)
+#+END_SRC
   - TODO show threading macro example
 - 0-overhead function dispatch based on keys
 - macroexpand-time validation that a function is called properly

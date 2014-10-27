@@ -37,6 +37,22 @@
   (outfn :x 2) => "xx"
   (outfn :y 3) => "yyy")
 
+(defoutfn map-v2.0 {}
+  "Like map, but better"
+  [f coll]
+  (map f coll))
+
+(fact
+  "threading macro example"
+  (->> 5
+       range
+       (map-v2.0 :f inc :coll))
+  => (range 1 6)
+  (->> 5
+       (partial +)
+       (map-v2.0 :coll (range 5) :f))
+  => (range 5 10))
+
 (fact
   "glossary needs to be a function"
   (eval '(defoutfn outfn? {:glossary 3}
