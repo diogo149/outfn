@@ -128,3 +128,7 @@
   (bar-fn :foo 2 :a 3 :b 4 :c 5 :d 6 :q 72) => 2
   ;; it's lazy, note how it doesn't throw an exception
   (bar-fn :foo 42 :a (throw (Exception.))) => 42)
+
+(fact
+  "macroexpand-time implicit validation"
+  (eval '(when nil (bar-fn :q 11))) => (throws Throwable))
