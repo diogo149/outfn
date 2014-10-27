@@ -1,23 +1,33 @@
 * outfn
 A macro for simpler, more declarative functions.
-
-Naming, meaning, and validation shouldn't be separated. Doing so hurts readability and encourages subtle bugs (confusing a variable for a different one because the name is the same) and boilerplace (validating the same name the same way in different places).
-
-By creating a glossary or "concept map", we create a central place for understanding the types of data passing through a system, their meaining, and their names. Forcing you to think about and create this then allows more declarative programming, by implicitly calling these functions leading to simpler, less coupled logic.
-
-Let's avoid using the same name to refer to different things and enjoy simpler programming.
 ** Features
 *** vanilla/base outfn
 - keyword arguments for clarity of function arguments
+  #+BEGIN_SRC clojure
+    (outfn :x 3 :y 4)
+  #+END_SRC
 - function dispatch by argument instead of arity
+  #+BEGIN_SRC clojure
+    (defoutfn outfn {}
+      "doc"
+      ([x] (clojure.string/join (repeat x "x")))
+      ([y] (clojure.string/join (repeat y "y"))))
+
+    (outfn :x 2) ;; "xx"
+    (outfn :y 3) ;; "yyy"
+  #+END_SRC
 - decomplecting order from function arguments
   - TODO show threading macro example
 - 0-overhead function dispatch based on keys
 - macroexpand-time validation that a function is called properly
 *** :glossary
+Naming, meaning, and validation shouldn't be separated. Doing so hurts readability and encourages subtle bugs (confusing a variable for a different one because the name is the same) and boilerplace (validating the same name the same way in different places). Let's avoid using the same name to refer to different things and enjoy simpler programming.
+
 - ensures consistent naming which encourages thinking more about names
 - DRY validation
 *** :implicits
+By creating a glossary or "concept map", we create a central place for understanding the types of data passing through a system, their meaining, and their names. Forcing you to think about and create this then allows more declarative programming, by implicitly calling these functions leading to simpler, less coupled logic.
+
 - declarative programming
   - TODO show lazy example
 - solves the "big let" problem by breaking the problem down into domain-level concepts
@@ -37,13 +47,16 @@ Let's avoid using the same name to refer to different things and enjoy simpler p
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- make glossary optional
+- make map and docstring optional
 - common data validation
   - if contains :implicits, must contain :output
 - validate output as well
 - more tests / docs
 - prismatic schema validation
-- prismatic graph for parallel evaluation
+- implicits improvements
+  - auto add try-catch for implicits with nice error handling
+  - function to generate visualize call graph (w/ loom)
+  - prismatic graph for parallel evaluation
 - usage examples for each feature
 - figure out how to add cost
   - should each subfunction have its own cost

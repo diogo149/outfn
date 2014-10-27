@@ -10,6 +10,10 @@ generated functions to dispatch to and their inputs and outputs"}
   outfn-state
   (atom {}))
 
+(defn clear-var!
+  [outfn-var]
+  (swap! outfn-state dissoc outfn-var))
+
 (defn save-fn!
   [outfn-var input-kws f]
   {:pre [(var? outfn-var)

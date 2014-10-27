@@ -7,10 +7,9 @@
 
 (defn defoutfn*
   "TODO"
-  [outfn-name {:keys [glossary] :as params} docstring raw-forms]
+  [outfn-name params docstring raw-forms]
   {:pre [(symbol? outfn-name)
-         (string? docstring)
-         (ifn? glossary)]}
+         (string? docstring)]}
   (let [forms (if (list? (first raw-forms))
                 raw-forms
                 (list raw-forms))
@@ -19,6 +18,7 @@
                                          {:ns *ns*
                                           :outfn-name outfn-name
                                           :outfn-var outfn-var})]
+    (state/clear-var! outfn-var)
     (state/save-common-data! outfn-var common-data-map)
     (->> forms
          analyze/read-fns

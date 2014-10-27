@@ -3,19 +3,19 @@
             clojure.repl
             [outfn.core :refer :all]))
 
-(defoutfn outfn0 {:glossary no-glossary}
+(defoutfn outfn0 {}
   "secret code: 123"
   [foo]
-  nil)
+  {:foo foo})
 
 (fact
   "single arity outfn"
-  (outfn0 :foo 2) => nil
+  (outfn0 :foo 2) => {:foo 2}
   (with-out-str (clojure.repl/doc outfn0)) => #"secret code: 123"
   ;; using eval because it throws a macroexpand time exception
   (eval '(outfn0 :bar 2)) => (throws AssertionError))
 
-(defoutfn outfn1 {:glossary no-glossary}
+(defoutfn outfn1 {}
   "Docstring"
   ([foo] {:foo foo})
   ([bar] {:bar bar})
@@ -27,21 +27,29 @@
   (outfn1 :bar 2) => {:bar 2}
   (outfn1 :foo 3 :bar 2) => {:foobar 5})
 
+(defoutfn outfn {}
+  "doc"
+  ([x] (clojure.string/join (repeat x "x")))
+  ([y] (clojure.string/join (repeat y "y"))))
+
+(fact
+  "multiple arity outfn 2"
+  (outfn :x 2) => "xx"
+  (outfn :y 3) => "yyy")
+
 (fact
   "glossary needs to be a function"
-  (eval '(defoutfn outfn? {}
+  (eval '(defoutfn outfn? {:glossary 3}
            "Docstring"
            [foo])) => (throws AssertionError))
 
-(defoutfn foo-fn {:glossary no-glossary
-                  :output :foo}
+(defoutfn foo-fn {:output :foo}
   "Docstring"
   ([a] 3)
   ([b] 4)
   ([c d] 5))
 
-(defoutfn bar-fn {:glossary no-glossary
-                  :output :bar
+(defoutfn bar-fn {:output :bar
                   :implicits #{#'foo-fn}}
   "what's up doc"
   [foo] foo)
