@@ -52,6 +52,7 @@ Naming, meaning, and validation shouldn't be separated. Doing so hurts readabili
 
 - DRY, non-intrusive validation
   #+BEGIN_SRC clojure
+    ;; all the validation in one place!
     (def a-glossary {:foo {:validator #(= :foo %)}
                      :choo {:schema {:a {:b s/Int}}}})
 
