@@ -1,5 +1,6 @@
 (ns outfn.generate
   (:require [outfn.util :as util]
+            [outfn.implicits :as implicits]
             [outfn.state :as state]))
 
 ;; -------------------------
@@ -47,6 +48,16 @@
 ;; calling generated functions
 ;; ---------------------------
 
+(defn implicit-fn-call
+  "TODO"
+  [outfn-var input-kws arg-map]
+  #_
+  (let [syms (for [s (loom/nodes graph)]
+               (gensym (name s)))])
+  (assert false (format "Invalid set of keys %s for %s"
+                            input-kws
+                            outfn-var)))
+
 (defn generated-fn-call
   "TODO"
   [outfn-var arg-map]
@@ -57,7 +68,4 @@
     (if-let [f (state/get-fn outfn-var input-kws)]
       ;; position arguments appropriately
       (cons f (map arg-map (sort input-kws)))
-      ;; TODO replace with implicit fn call
-      (assert false (format "Invalid set of keys %s for %s"
-                            input-kws
-                            outfn-var)))))
+      (implicit-fn-call outfn-var input-kws arg-map))))

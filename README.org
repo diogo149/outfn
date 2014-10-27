@@ -33,33 +33,28 @@ Let's avoid using the same name to refer to different things and enjoy simpler p
 - macroexpand-time validation of implicits to make sure all the data that is needed is available before the system is running
 - auto-testing : by having multiple ways to solve for the same thing, a test suite can be automatically run to make sure each way returns the same result
   - TODO
-* Development
+** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
-* TODO
-syms (for [s (loom/nodes graph)]
-               (gensym (name s)))
-
+** TODOs
 - implement implicits
   - implicits should take in a set of vars
 - validate output as well
 - more tests / docs
-- use something like defnk to make validation DRY
-- prismatic graph for parallel evaluation
 - prismatic schema validation
+- prismatic graph for parallel evaluation
 - usage examples for each feature
 - add metadata to each subfunction
   - eg. cost to have implicits find the lowest cost route to get an answer
 - add non-macro version
   - for clojurescript compatibility
 - better name
-* TODO implicits
-- problem: how to find the optimal set of calls
-  - there is an exponential number of states relative to the number of concepts
-    - each concept is either present or not
-  - the caching problem: local suboptimal routes may be part of a global optimal route because the intermediates may be shared
-- resources
-  - [[https://github.com/aysylu/loom][loom]]
-  - [[https://github.com/aysylu/loom/blob/master/src/loom/graph.clj][loom/graph.clj]]
-  - [[http://mvnrepository.com/artifact/org.optaplanner][maven optaplanner]]
-  - [[https://github.com/droolsjbpm/optaplanner][optaplanner github]]
-  - [[http://www.optaplanner.org/learn/documentation.html][optaplanner docs]]
+- use something like defnk to make validation DRY
+- better implicits algorithm
+  - problem: how to find the optimal set of calls
+    - there is an exponential number of states relative to the number of concepts
+      - each concept is either present or not
+    - the caching problem: local suboptimal routes may be part of a global optimal route because the intermediates may be shared
+  - resources
+    - [[http://mvnrepository.com/artifact/org.optaplanner][maven optaplanner]]
+    - [[https://github.com/droolsjbpm/optaplanner][optaplanner github]]
+    - [[http://www.optaplanner.org/learn/documentation.html][optaplanner docs]]
