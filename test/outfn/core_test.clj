@@ -125,6 +125,6 @@
   (bar-fn :b 42) => 4
   (bar-fn :c 11 :d 22) => 5
   (eval '(bar-fn :c 2)) => (throws Exception)
-  (bar-fn :foo 2 :a 3 :b 4 :c 5 :d 6) => 2
+  (bar-fn :foo 2 :a 3 :b 4 :c 5 :d 6 :q 72) => 2
   ;; it's lazy, note how it doesn't throw an exception
   (bar-fn :foo 42 :a (throw (Exception.))) => 42)

@@ -80,6 +80,30 @@ Naming, meaning, and validation shouldn't be separated. Doing so hurts readabili
 By creating a glossary or "concept map", we create a central place for understanding the types of data passing through a system, their meaining, and their names. Forcing you to think about and create this then allows more declarative programming, by implicitly calling these functions leading to simpler, less coupled logic.
 
 - declarative programming
+  #+BEGIN_SRC clojure
+    (defoutfn foo-fn {:output :foo}
+      "Docstring"
+      ([a] 3)
+      ([b] 4)
+      ([c d] 5))
+
+    (defoutfn bar-fn {:output :bar
+                      :implicits #{#'foo-fn}}
+      "what's up doc"
+      [foo] foo)
+
+    ;; Look ma, no glue code
+    (bar-fn :foo 2) ;; 2
+    (bar-fn :a nil) ;; 3
+    (bar-fn :b 42) ;; 4
+    (bar-fn :c 11 :d 22) ;; 5
+
+    ;; I don't need to know what bar-fn needs - decoupling
+    (bar-fn :foo 2 :a 3 :b 4 :c 5 :d 6 :q 72) ;; 2
+
+    ;; Laziness is a virtue
+    (bar-fn :foo 42 :a (throw Exception.)) ;; 42
+  #+END_SRC
   - TODO show lazy example
 - solves the "big let" problem by breaking the problem down into domain-level concepts
 - solves the problem of dependency passing (normal solutions involve explicitly declaring dependencies of all your dependencies or passing an opaque options map or using dynamic vars; parameters are coupled either way)
