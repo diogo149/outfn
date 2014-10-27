@@ -3,6 +3,10 @@
             clojure.repl
             [outfn.core :refer :all]))
 
+;; ----------
+;; base outfn
+;; ----------
+
 (defoutfn outfn0 {}
   "secret code: 123"
   [foo]
@@ -53,6 +57,21 @@
        (map-v2.0 :coll (range 5) :f))
   => (range 5 10))
 
+(defoutfn outfn {}
+  ""
+  [foo]
+  :foo)
+
+(fact
+  "macroexpand time validation"
+  (eval '(when nil
+           (outfn :fo 2)))
+  => (throws Throwable))
+
+;; --------
+;; glossary
+;; --------
+
 (fact
   "glossary needs to be a function"
   (eval '(defoutfn outfn? {:glossary 3}
@@ -64,6 +83,10 @@
   ([a] 3)
   ([b] 4)
   ([c d] 5))
+
+;; ---------
+;; implicits
+;; ---------
 
 (defoutfn bar-fn {:output :bar
                   :implicits #{#'foo-fn}}

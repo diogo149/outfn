@@ -32,7 +32,17 @@ A macro for simpler, more declarative functions.
          (map-v2.0 :coll (range 5) :f)) ;; (5 6 7 8 9)
   #+END_SRC
 - 0-overhead function dispatch based on keys
-- macroexpand-time validation that a function is called properly
+- macroexpand-time validation that a function is called properly - no waiting for unlucky input needed
+  #+BEGIN_SRC clojure
+    (defoutfn outfn {}
+      ""
+      [foo]
+      :foo)
+
+    (when nil
+      (outfn :fo 2))
+    ;; Error!  Invalid set of keys #{:fo} for #'outfn.core/outfn
+  #+END_SRC
 *** :glossary
 Naming, meaning, and validation shouldn't be separated. Doing so hurts readability and encourages subtle bugs (confusing a variable for a different one because the name is the same) and boilerplace (validating the same name the same way in different places). Let's avoid using the same name to refer to different things and enjoy simpler programming.
 
