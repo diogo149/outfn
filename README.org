@@ -75,15 +75,13 @@ Naming, meaning, and validation shouldn't be separated. Doing so hurts readabili
     (outfn2 :choo {:a {:b 3}}) ;; => :world
     (outfn2 :choo {:a {:b "3"}}) ;; => Error!
   #+END_SRC
-- encourages consistent naming which encourages thinking more about names (due to the validation)
+- encourages consistent naming which encourages thinking more about names (due to the centralized validation based on naming)
 *** Implicits
 By creating a glossary or "concept map", we create a central place for understanding the types of data passing through a system, their meaining, and their names. Forcing you to think about and create this then allows more declarative programming, by implicitly calling these functions leading to simpler, less coupled logic.
 
 - declarative programming
   - TODO show lazy example
 - solves the "big let" problem by breaking the problem down into domain-level concepts
-- could allow for optimizations in the future with batching (group together db calls), parallelization (evaluating the DAG of function calls), or intelligently picking the lowest cost route from the input to the desired data (assigning costs to each function and automatically switching over to a more efficient query)
-- easier debugging
 - solves the problem of dependency passing (normal solutions involve explicitly declaring dependencies of all your dependencies or passing an opaque options map or using dynamic vars; parameters are coupled either way)
   - eg. x calls y
     - former:
@@ -93,8 +91,12 @@ By creating a glossary or "concept map", we create a central place for understan
       - the arguments of x contains some map containing the arguments of y
       - in order to understand how x is called, you need to understand y
 - macroexpand-time validation of implicits to make sure all the data that is needed is available before the system is running
+**** Potential Benefits
+- could allow for optimizations in the future with batching (group together db calls), parallelization (evaluating the DAG of function calls), or intelligently picking the lowest cost route from the input to the desired data (assigning costs to each function and automatically switching over to a more efficient query)
 - auto-testing : by having multiple ways to solve for the same thing, a test suite can be automatically run to make sure each way returns the same result
   - TODO
+- easier debugging
+  - TODO try-catch can be automatically generated, and all the relevant information can be thrown on an exception
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
