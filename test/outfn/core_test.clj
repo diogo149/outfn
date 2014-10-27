@@ -132,3 +132,30 @@
 (fact
   "macroexpand-time implicit validation"
   (eval '(when nil (bar-fn :q 11))) => (throws Throwable))
+
+(def big-let-block (let [a 42
+                         b (+ 31 a)
+                         c (* 2 b)
+                         d (+ a b)
+                         e (/ c a)
+                         f (* d e)
+                         g (dec e)]
+                     (+ b d f)))
+
+(defoutfn a {:output :a} "Returns an a" [] 42)
+(defoutfn b {:output :b} "Returns a b" [a] (+ 31 a))
+(defoutfn c {:output :c} "Returns a c" [b] (* 2 b))
+(defoutfn d {:output :d} "Returns a d" [a b] (+ a b))
+(defoutfn e {:output :e} "Returns an e" [a c] (/ c a))
+(defoutfn f {:output :f} "Returns a f" [d e] (* d e))
+(defoutfn g {:output :g} "Returns a g" [e] (dec e))
+(defoutfn result {:output :result
+                  :implicits #{#'a #'b #'c #'d #'e #'f #'g}}
+  "Returns an a"
+  [b d f]
+  (+ b d f))
+
+#_ ;; FIXME
+(fact
+  "solving big let block problem"
+  (result) => big-let-block)

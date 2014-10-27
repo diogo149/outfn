@@ -32,7 +32,7 @@
                (format (str "The first of every pair of arguments "
                             "to %s must be a keyword")
                        '~outfn-name))
-       (generate/generated-fn-call ~outfn-var arg-map#))))
+       (generate/generated-fn-call ~outfn-var (or arg-map# {})))))
 
 (defmacro defoutfn
   "TODO docstring"

@@ -128,7 +128,8 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- usage examples for each feature
+- finish implicits readme
+- fix big let block test
 - common-data-map validation
   - if contains :implicits, must contain :output
 - validate output when :output param is given
