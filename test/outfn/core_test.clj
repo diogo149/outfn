@@ -1,15 +1,17 @@
 (ns outfn.core-test
   (:require [midje.sweet :refer :all]
+            clojure.repl
             [outfn.core :refer :all]))
 
 (defoutfn outfn0 {:glossary no-glossary}
-  ""
+  "secret code: 123"
   [foo]
   nil)
 
 (fact
   "single arity outfn"
   (outfn0 :foo 2) => nil
+  (with-out-str (clojure.repl/doc outfn0)) => #"secret code: 123"
   ;; using eval because it throws a macroexpand time exception
   (eval '(outfn0 :bar 2)) => (throws AssertionError))
 
@@ -52,4 +54,5 @@
   (bar-fn :c 11 :d 22) => 5
   (eval '(bar-fn :c 2)) => (throws Exception)
   (bar-fn :foo 2 :a 3 :b 4 :c 5 :d 6) => 2
+  ;; it's lazy, note how it doesn't throw an exception
   (bar-fn :foo 42 :a (throw (Exception.))) => 42)

@@ -37,6 +37,7 @@ Let's avoid using the same name to refer to different things and enjoy simpler p
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
+- make glossary optional
 - common data validation
   - if contains :implicits, must contain :output
 - validate output as well
