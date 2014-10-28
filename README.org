@@ -224,7 +224,7 @@ By creating a glossary or "concept map", we create a central place for understan
 - auto-testing : by having multiple ways to solve for the same thing, a test suite can be automatically run to make sure each way returns the same result
   - eg. if there are multiple way to compute the same value, they can all be computed and compared to each other for validation
 ** Things to watch out for
-- when multiple matches are possible, but not an exact match, the first match is chosen:
+- when multiple matches are possible, but not an exact match, the first declared match is chosen:
   #+BEGIN_SRC clojure
     (defoutfn outfn1
       "Docstring"
