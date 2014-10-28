@@ -181,10 +181,27 @@
 (defoutfn g {:output :g} "Returns a g" [e] (dec e))
 (defoutfn result {:output :result
                   :implicits #{#'a #'b #'c #'d #'e #'f #'g}}
-  "Returns an a"
+  "Returns the answer!"
   [b d f]
   (+ b d f))
 
 (fact
   "solving big let block problem"
   (result) => big-let-block)
+
+(def big-let-block-2 (let [a 42
+                           b (+ a 16)
+                           c (* a b)]
+                       (+ a b c)))
+
+(defoutfn a {:output :a} "Returns an a" [] 42)
+(defoutfn b {:output :b} "Returns a b" [a] (+ a 16))
+(defoutfn c {:output :c} "Returns a c" [a b] (* a b))
+(defoutfn result {:output :result
+                  :implicits #{#'a #'b #'c}}
+  "Returns the answer"
+  [a b c]
+  (+ a b c))
+(fact
+  "big let problem 2"
+  (result) => big-let-block-2)

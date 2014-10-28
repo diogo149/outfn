@@ -113,6 +113,27 @@ By creating a glossary or "concept map", we create a central place for understan
       (bar-fn :q 11)) ;; ERROR
   #+END_SRC
 - solves the "big let" problem by breaking the problem down into domain-level concepts
+  #+BEGIN_SRC clojure
+    ;; imperative code that is hard to break down
+    (def imperative-ans (let [a 42
+                              b (+ a 16)
+                              c (* a b)]
+                          (+ a b c)))
+
+    ;; no imperative code here:
+    (defoutfn a {:output :a} "Returns an a" [] 42)
+    (defoutfn b {:output :b} "Returns a b" [a] (+ a 16))
+    (defoutfn c {:output :c} "Returns a c" [a b] (* a b))
+    (defoutfn result {:output :result
+                      :implicits #{#'a #'b #'c}}
+      "Returns the answer"
+      [a b c]
+      (+ a b c))
+
+    (assert (= (result)
+               imperative-ans))
+
+  #+END_SRC
 - solves the problem of dependency passing (normal solutions involve explicitly declaring dependencies of all your dependencies or passing an opaque options map or using dynamic vars; parameters are coupled either way)
   - eg. x calls y
     - former:
