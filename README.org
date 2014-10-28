@@ -219,7 +219,7 @@ By creating a glossary or "concept map", we create a central place for understan
   - try-catch can be automatically generated, and all the relevant information can be thrown on an exception
 - optimizations
   - batching (eg. group together DB calls)
-  - parallelization (evaluating the DAG on function calls)
+  - parallelization (evaluating non-dependent function calls in parallel)
   - determining the lowest cost route from the input to the desired data (assigning cost to each function call)
 - auto-testing : by having multiple ways to solve for the same thing, a test suite can be automatically run to make sure each way returns the same result
   - eg. if there are multiple way to compute the same value, they can all be computed and compared to each other for validation
