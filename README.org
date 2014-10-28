@@ -1,5 +1,20 @@
 * outfn
 A macro for simpler, clearer, more declarative functions (that are actually macros).
+
+If you've thought to yourself any of the following, read on:
+- What is this function and what do the arguments mean?
+- I want to name these functions the same thing, because they do the same thing!
+- If only this function's arguments were in a different order, I could use a threading macro.
+- I wish my code failed faster when I have a typo or refactoring error.
+- I want validated code, but without writing validation code.
+- We need one single place in the code that a new person could read and understand all the data that passes through.
+- Why did you name these things the exact same thing??? That's not what it means.
+- This let block is so ugly and imperative, but I can't break it down.
+- I need to pass $DATA all the way to $DEEP_INNER_FUNCTION? This is going to be ugly.
+- I know, a ~:dynamic~ var is the perfect solution to this!
+- We have too much code, I want less!
+** Status
+This is all very alpha, and we're still testing how much we like using this. Feedback would be very much appreciated though.
 ** Features
 *** vanilla/base outfn
 - keyword arguments for clarity of function arguments
@@ -132,7 +147,6 @@ By creating a glossary or "concept map", we create a central place for understan
 
     (assert (= (result)
                imperative-ans))
-
   #+END_SRC
 - solves the problem of dependency passing (normal solutions involve explicitly declaring dependencies of all your dependencies or passing an opaque options map or using dynamic vars; parameters are coupled either way)
   - eg. x calls y
