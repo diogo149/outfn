@@ -94,6 +94,8 @@
 
 (fact
   "DRY validation"
+  ;; catch throwable because the prepost-map throws an AssertionError and
+  ;; schema throws an Exception
   (outfn1 :foo :foo) => 3.5
   (outfn1 :foo 42) => (throws Throwable)
   (outfn1 :choo {:a {:b 3}}) => :lochness
@@ -131,7 +133,7 @@
 
 (fact
   "macroexpand-time implicit validation"
-  (eval '(when nil (bar-fn :q 11))) => (throws Throwable))
+  (eval '(when nil (bar-fn :q 11))) => (throws Exception))
 
 (def big-let-block (let [a 42
                          b (+ 31 a)
