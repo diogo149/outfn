@@ -156,6 +156,62 @@ By creating a glossary or "concept map", we create a central place for understan
     - later:
       - the arguments of x contains some map containing the arguments of y
       - in order to understand how x is called, you need to understand y
+  - let's have an example:
+    #+BEGIN_SRC clojure
+      ;; let's start with two functions... they're all nice and understandable
+      (defn gimme-data
+        "Returns raw data"
+        [db some-options]
+        ;; do some stuff with all these inputs...
+        :data)
+
+      (defn filter-data
+        "Returns filtered data"
+        [data]
+        (let [top-secret-filter identity]
+          (top-secret-filter data)))
+
+      ;; in order to know how to call this function, I need to know how to call
+      ;; the functions it calls!
+      (defn gimme-filtered-data
+        [db some-options]
+        (filter-data (gimme-data db some-options)))
+
+      (defn api-call-coupled1
+        []
+        (let [db :just-kidding
+              some-options {:something :something}]
+          (gimme-filtered-data db some-options)))
+
+      (defn api-call-coupled2
+        []
+        (let [db :just-kidding
+              some-options {:something :something}]
+          ;; do I need to have all my db calls in my top-level calls just to have
+          ;; decoupled code?
+          (filter-data (gimme-filtered-data db some-options))))
+
+      (defoutfn data-outfn {:output :data}
+        "Returns raw data"
+        [db some-options]
+        ;; do some stuff with all these inputs...
+        :data)
+
+      (def db-calls #{#'data-outfn})
+
+      (defoutfn filtered-data-outfn {:output :filtered-data
+                                     :implicits db-calls}
+        "Returns filtered data"
+        [data]
+        (let [top-secret-filter identity]
+          (top-secret-filter data)))
+
+      (defn api-call-with-implicits
+        []
+        (let [db :just-kidding
+              some-options {:something :something}]
+          (filtered-data-outfn :db db :some-options some-options)))
+    #+END_SRC
 **** Future Benefits of Implicits
 - easier debugging
   - try-catch can be automatically generated, and all the relevant information can be thrown on an exception
