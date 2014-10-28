@@ -14,7 +14,7 @@ If you've thought to yourself any of the following, read on:
 - I know, a ~:dynamic~ var is the perfect solution to this!
 - We have too much code, I want less!
 ** Status
-This is all very alpha, and we're still testing how much we like using this. Feedback would be very much appreciated though. (A better name would be cool too, since the ~outfn~ macro generates a macro to get the validation before runtime.)
+This is all very alpha, and I'm still testing how well this works in practice. Feedback would be very much appreciated though. (A better name would be cool too, since the ~outfn~ macro generates a macro to get the validation before runtime.)
 ** Features
 *** vanilla/base outfn
 - keyword arguments for clarity of function arguments
@@ -239,7 +239,7 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- clojars
+- push out 0.1.0
 - common-data-map validation
   - if contains :implicits, must contain :output
 - validate output when :output param is given
