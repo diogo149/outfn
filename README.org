@@ -156,7 +156,7 @@ By creating a glossary or "concept map", we create a central place for understan
     - later:
       - the arguments of x contains some map containing the arguments of y
       - in order to understand how x is called, you need to understand y
-  - let's have an example... start with two functions... they're all nice and understandable
+  - Let's have an example: Start with some functions that are all nice and understandable. Note that they can be understood in their entirety based on their contents.
     #+BEGIN_SRC clojure
       (defn gimme-data
         "Returns raw data"
@@ -191,7 +191,7 @@ By creating a glossary or "concept map", we create a central place for understan
                 some-options {:something :something}]
             (filter-data (gimme-filtered-data db some-options))))
       #+END_SRC
-    - Option C: Use implicits and not have to write any glue code!
+    - Option C: Use implicits and not have to write any glue code! Note that the insides of each function can be understood in their entirety based on their content, except for the one call to ~filtered-data-outfn~, and you can look up in a glossary to see what it returns.
       #+BEGIN_SRC clojure
         (defoutfn data-outfn {:output :data}
           "Returns raw data"
