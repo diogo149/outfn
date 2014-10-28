@@ -1,5 +1,5 @@
 * outfn
-A macro for simpler, more declarative functions.
+A macro for simpler, clearer, more declarative functions (that are actually macros).
 ** Features
 *** vanilla/base outfn
 - keyword arguments for clarity of function arguments
@@ -35,7 +35,7 @@ A macro for simpler, more declarative functions.
   - No intermediate maps are made.
   - All the work is done at macroexpand-time.
   - Positional argument function calls are generated.
-- macroexpand-time validation that a function is called properly - no waiting for (un)lucky input at runtime needed
+- macroexpand-time validation that a function is called properly - no waiting for (un)lucky input at runtime needed! hello easier refactoring and goodbye typos at run/test time
   #+BEGIN_SRC clojure
     (defoutfn outfn
       "what's up doc"
@@ -107,7 +107,9 @@ By creating a glossary or "concept map", we create a central place for understan
 - macroexpand-time validation of implicits
   #+BEGIN_SRC clojure
     (when nil
-      ;; I don't run
+      ;; No errors here:
+      (bar-fn :c 11 :d 22)
+      ;; I don't run, but still error out
       (bar-fn :q 11)) ;; ERROR
   #+END_SRC
 - solves the "big let" problem by breaking the problem down into domain-level concepts
@@ -119,7 +121,7 @@ By creating a glossary or "concept map", we create a central place for understan
     - later:
       - the arguments of x contains some map containing the arguments of y
       - in order to understand how x is called, you need to understand y
-**** Potential Benefits
+**** Potential Benefits (for Implicits)
 - could allow for optimizations in the future with batching (group together db calls), parallelization (evaluating the DAG of function calls), or intelligently picking the lowest cost route from the input to the desired data (assigning costs to each function and automatically switching over to a more efficient query)
 - auto-testing : by having multiple ways to solve for the same thing, a test suite can be automatically run to make sure each way returns the same result
   - TODO
@@ -129,10 +131,13 @@ By creating a glossary or "concept map", we create a central place for understan
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
 - finish implicits readme
+- clojars
+- more tests / docs
+- better name (maybe?)
+  - (since it's a macro)
 - common-data-map validation
   - if contains :implicits, must contain :output
 - validate output when :output param is given
-- more tests / docs
 - go through all the code TODOs for low hanging fruit, add the rest here
 - implicits improvements
   - auto add try-catch for implicits with nice error handling
@@ -145,7 +150,6 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
   - should the toplevel outfn have a cost
 - add non-macro version
   - for clojurescript compatibility
-- better name (maybe?)
 - use something like defnk to make validation DRY
 - consider implicit transitivity (can call implicits of functions that can be called implicitly)
 - better implicits algorithm
@@ -157,6 +161,9 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
     - [[http://mvnrepository.com/artifact/org.optaplanner][maven optaplanner]]
     - [[https://github.com/droolsjbpm/optaplanner][optaplanner github]]
     - [[http://www.optaplanner.org/learn/documentation.html][optaplanner docs]]
+- refactoring tools
+  - detecting/eliminating unused arguments
+  - renaming arguments throughout the whole codebase
 ** Won't-s
 - make both docstring and params optional
   - because there can be ambiguity between the params and the functions
