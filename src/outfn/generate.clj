@@ -1,5 +1,6 @@
 (ns outfn.generate
-  (:require [outfn.util :as util]
+  (:require [clojure.set :as set]
+            [outfn.util :as util]
             [outfn.implicits :as implicits]
             [outfn.state :as state]))
 
@@ -47,6 +48,25 @@
 ;; ---------------------------
 ;; calling generated functions
 ;; ---------------------------
+
+(defn positional-fn-call
+  "Returns the positional arguments for an outfn, if any for the given arg-map"
+  [outfn-var input-kws arg-map]
+  {:pre [(var? outfn-var)
+         (map? arg-map)
+         (set? input-kws)
+         (every? keyword? (keys arg-map))]}
+  (let [input-sets (state/get-input-sets outfn-var)
+        selected-input-set (first (filter #(every? input-kws %) input-sets))]
+    (when selected-input-set
+      (let [f (state/get-fn outfn-var selected-input-set)]
+        ;; this assertion should never fail, because the input sets are keys
+        ;; in a map to their respective functions
+        (assert f (format "ERROR: outfn not found for %s with keys %s"
+                          outfn-var
+                          selected-input-set))
+        ;; position arguments appropriately
+        (cons f (map arg-map (sort selected-input-set)))))))
 
 (defn var->computations
   [v]
@@ -134,7 +154,5 @@
          (map? arg-map)
          (every? keyword? (keys arg-map))]}
   (let [input-kws (set (keys arg-map))]
-    (if-let [f (state/get-fn outfn-var input-kws)]
-      ;; position arguments appropriately
-      (cons f (map arg-map (sort input-kws)))
-      (implicit-fn-call outfn-var input-kws arg-map))))
+    (or (positional-fn-call outfn-var input-kws arg-map)
+        (implicit-fn-call outfn-var input-kws arg-map))))

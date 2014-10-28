@@ -18,7 +18,7 @@
   (outfn0 :foo 2) => {:foo 2}
   (with-out-str (clojure.repl/doc outfn0)) => #"secret code: 123"
   ;; using eval because it throws a macroexpand time exception
-  (eval '(outfn0 :bar 2)) => (throws AssertionError))
+  (eval '(outfn0 :bar 2)) => (throws Exception))
 
 (defoutfn outfn1
   "Docstring"
@@ -77,7 +77,7 @@
   "glossary needs to be a function"
   (eval '(defoutfn outfn? {:glossary 3}
            "Docstring"
-           [foo])) => (throws AssertionError))
+           [foo])) => (throws Exception))
 
 (def a-glossary {:foo {:validator #(= :foo %)}
                  :choo {:schema {:a {:b s/Int}}}})
@@ -142,6 +142,26 @@
                          g (dec e)]
                      (+ b d f)))
 
+
+(declare bar-fn)
+(defoutfn foo-fn {:output :foo
+                  :implicits #{#'bar-fn}}
+  "docstring"
+  []
+  :foo)
+
+(defoutfn bar-fn {:output :bar
+                  :implicits #{#'foo-fn}}
+  "docstring"
+  [foo]
+  foo)
+
+(fact
+  "implicits with 0 argument outfns"
+  (bar-fn) => :foo
+  (foo-fn) => :foo
+  (foo-fn :bar 3) => :foo)
+
 (defoutfn a {:output :a} "Returns an a" [] 42)
 (defoutfn b {:output :b} "Returns a b" [a] (+ 31 a))
 (defoutfn c {:output :c} "Returns a c" [b] (* 2 b))
@@ -155,7 +175,6 @@
   [b d f]
   (+ b d f))
 
-#_ ;; FIXME
 (fact
   "solving big let block problem"
   (result) => big-let-block)

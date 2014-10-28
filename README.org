@@ -148,6 +148,7 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
   - for clojurescript compatibility
 - better name (maybe?)
 - use something like defnk to make validation DRY
+- consider implicit transitivity (can call implicits of functions that can be called implicitly)
 - better implicits algorithm
   - problem: how to find the optimal set of calls
     - there is an exponential number of states relative to the number of concepts

@@ -1,7 +1,8 @@
 (ns outfn.implicits
   (:require [loom.graph :as loom]
             loom.alg
-            [slingshot.slingshot :as ss]))
+            [slingshot.slingshot :as ss]
+            [outfn.util :as util]))
 
 ;; ------------
 ;; computation representation
@@ -26,6 +27,7 @@
 ;; -----------
 
 (defn unweighted-graph-merge
+  ([] (loom/digraph))
   ([g] g)
   ([g1 g2]
      (-> g1
