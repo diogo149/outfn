@@ -127,6 +127,19 @@ By creating a glossary or "concept map", we create a central place for understan
   - TODO
 - easier debugging
   - TODO try-catch can be automatically generated, and all the relevant information can be thrown on an exception
+** Things to watch out for
+- when multiple matches are possible, but not an exact match, the first match is chosen:
+  #+BEGIN_SRC clojure
+    (defoutfn outfn1
+      "Docstring"
+      ([foo] {:foo foo})
+      ([bar] {:bar bar})
+      ([foo bar] {:foobar (+ foo bar)}))
+
+    (outfn1 :foo 3 :bar 2) ;; {:foobar 5}
+    (outfn1 :foo 3) ;; {:foo 3}
+    (outfn1 :bar 2 :foo 3 :choo 18) ;; {:foo 3}
+  #+END_SRC
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs

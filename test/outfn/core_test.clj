@@ -32,6 +32,14 @@
   (outfn1 :bar 2) => {:bar 2}
   (outfn1 :foo 3 :bar 2) => {:foobar 5})
 
+(fact
+  "prefer exact match when possible"
+  (outfn1 :foo 3 :bar 2) => {:foobar 5})
+
+(fact
+  "take first match when no exact match"
+  (outfn1 :bar 2 :foo 3 :choo 18) => {:foo 3})
+
 (defoutfn outfn
   "doc"
   ([x] (clojure.string/join (repeat x "x")))

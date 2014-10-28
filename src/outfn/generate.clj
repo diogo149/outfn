@@ -57,7 +57,11 @@
          (set? input-kws)
          (every? keyword? (keys arg-map))]}
   (let [input-sets (state/get-input-sets outfn-var)
-        selected-input-set (first (filter #(every? input-kws %) input-sets))]
+        selected-input-set (if (some #{input-kws} input-sets)
+                             ;; prefer an exact match if possible
+                             input-kws
+                             ;; else take the first match
+                             (first (filter #(every? input-kws %) input-sets)))]
     (when selected-input-set
       (let [f (state/get-fn outfn-var selected-input-set)]
         ;; this assertion should never fail, because the input sets are keys

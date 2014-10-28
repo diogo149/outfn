@@ -20,6 +20,10 @@ generated functions to dispatch to and their inputs and outputs"}
          (set? input-kws)
          (every? keyword? input-kws)
          (ifn? f)]}
+  (swap! outfn-state update-in [outfn-var :input-kws] (fn [x]
+                                                        (if x
+                                                          (conj x input-kws)
+                                                          [input-kws])))
   ;; not using util/safe-assoc-in because of re-evaluating code
   (swap! outfn-state assoc-in [outfn-var :fns input-kws] f))
 
@@ -49,7 +53,7 @@ generated functions to dispatch to and their inputs and outputs"}
 (defn get-input-sets
   [outfn-var]
   {:pre [(var? outfn-var)]}
-  (keys (get-in @outfn-state [outfn-var :fns])))
+  (get-in @outfn-state [outfn-var :input-kws]))
 
 (defn get-common-data
   [outfn-var]
