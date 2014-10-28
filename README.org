@@ -38,10 +38,12 @@ This is all very alpha, and I'm still testing how well this works in practice. F
       [f coll]
       (map f coll))
 
+    ;; threading in a collection
     (->> 5
          range
          (map-v2.0 :f inc :coll)) ;; (1 2 3 4 5)
 
+    ;; threading in a function
     (->> 5
          (partial +)
          (map-v2.0 :coll (range 5) :f)) ;; (5 6 7 8 9)
