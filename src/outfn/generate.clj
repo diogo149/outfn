@@ -132,9 +132,9 @@
 
         computed-let-pairs
         (doall (for [[o-kw i-kws :as pair] order]
-                 (let [intermediates (for [intermediate-kw @done-outputs]
-                                       [intermediate-kw
-                                        (kw->sym intermediate-kw)])
+                 (let [intermediates (vec (for [intermediate-kw @done-outputs]
+                                            [intermediate-kw
+                                             (kw->sym intermediate-kw)]))
                        intermediate-var (computation-pair->var pair)]
                    (swap! done-outputs conj o-kw)
                    [;; return the symbol to assign the value to
