@@ -246,10 +246,7 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
 - add usage instructions
   - include possible params and possible glossary params
 - push out 0.1.0
-- common-data-map validation
-  - if contains :implicits, must contain :output
 - validate output when :output param is given
-- go through all the code TODOs for low hanging fruit, add the rest here
 - implicits improvements
   - auto add try-catch for implicits with nice error handling
   - function to generate visualize call graph (w/ loom)
@@ -263,7 +260,6 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
   - possibilities
     - somehow get the macro version working
     - non-macro version
-- use something like defnk to make validation DRY
 - consider implicit transitivity (can call implicits of functions that can be called implicitly)
 - better implicits algorithm
   - problem: how to find the optimal set of calls
@@ -277,6 +273,12 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
 - refactoring tools
   - detecting/eliminating unused arguments
   - renaming arguments throughout the whole codebase
-** Won't-s
+- internal quality
+  - use something like defnk to make validation DRY
+  - go through all the code TODOs for low hanging fruit, add the rest here
+  - docstrings
+  - common-data-map validation
+    - if contains :implicits, must contain :output
+** Probably Won't-s
 - make both docstring and params optional
   - because there can be ambiguity between the params and the functions
