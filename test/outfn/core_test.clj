@@ -221,5 +221,22 @@
   "Implicits error handling 2"
   (ss/try+ (c) (catch Object e e))
   => (contains {:error-time :runtime
-                :outfn-var #'c
-                :intermediates [[:a 42]]}))
+                :outfn-var #'c}))
+
+(defoutfn a {:output :a} "Returns an a" [] (map (fn [x] (assert false)) [1]))
+(defoutfn b {:output :b} "Returns a b" [a] (+ a 16))
+(defoutfn c {:output :c :implicits #{#'a #'b}} "Returns a c" [a b] (* a b))
+(fact
+  "Implicits error handling w/ lazy intermediate and not evaluating it"
+  (ss/try+ (c) (catch Object e e))
+  => (contains {:error-time :runtime
+                :outfn-var #'c}))
+
+(defoutfn a {:output :a} "Returns an a" [] (map (fn [x] (assert false)) [1]))
+(defoutfn b {:output :b} "Returns a b" [a] (dorun a))
+(defoutfn c {:output :c :implicits #{#'a #'b}} "Returns a c" [a b] (* a b))
+(fact
+  "Implicits error handling w/ lazy intermediate and evaluating it"
+  (ss/try+ (c) (catch Object e e))
+  => (contains {:error-time :runtime
+                :outfn-var #'c}))
