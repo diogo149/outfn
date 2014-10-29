@@ -260,14 +260,16 @@ or
 #+END_SRC
 where:
 - $NAME :: Standard function name. A macro is created with the same name.
-- $PARAMS :: An optional map of extra data for the outfn.
+- $PARAMS :: An optional map of extra data for the outfn, with the following optional keys:
+  - glossary :: TODO
+  - implicits :: TODO
+  - output :: TODO
 - $DOCSTRING :: A non-optional standard docstring.
 - $INPUTS :: a series of symbols in a vector. Using ~&~ and destructuring is not permitted.
 - $LOGIC :: Standard function implementation.
-
-When calling outfn's, the keywords must be there at macroexpand time to allow for the validation. This means no ~(apply some-outfn [:foo foo])~.
-** Things to watch out for
-- when multiple matches are possible, but not an exact match, the first declared match is chosen:
+*** Things to note
+- When calling outfn's, the keywords must be there at macroexpand time to allow for the validation. This means no ~(apply some-outfn [:foo foo])~.
+- When multiple matches are possible, but not an exact match, the first declared match is chosen:
   #+BEGIN_SRC clojure
     (defoutfn outfn1
       "Docstring"
@@ -282,6 +284,7 @@ When calling outfn's, the keywords must be there at macroexpand time to allow fo
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
+- make :output optional if :implicits are given
 - add usage instructions
   - include possible params and possible glossary params
 - push out 0.1.0
@@ -327,7 +330,6 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
   - go through all the code TODOs for low hanging fruit, add the rest here
   - docstrings
   - common-data-map validation
-    - if contains :implicits, must contain :output
 ** Probably Won't-s
 - make both docstring and params optional
   - because there can be ambiguity between the params and the functions
