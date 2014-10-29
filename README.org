@@ -243,7 +243,12 @@ By creating a glossary or "concept map", we create a central place for understan
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
 - test implicits + validation
-- consider outputs in the map for the function being called implicitly, so that params can be cleaner and re-used
+- consider outputs in the map for the function being called implicitly
+  - pros:
+    - params look better, and multiple outfn's can use the exact same params
+  - cons:
+    - can't do output valdiation
+    - output seems to belong to the same params as the input (as in it makes sense)
 - add usage instructions
   - include possible params and possible glossary params
 - push out 0.1.0
