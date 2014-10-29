@@ -12,6 +12,7 @@ If you've thought to yourself any of the following, read on:
 - This let block is so ugly and imperative, but I can't break it down.
 - I need to pass $DATA all the way to $DEEP_INNER_FUNCTION? This is going to be ugly.
 - I know, a ~:dynamic~ var is the perfect solution to this!
+- I already have all the functionality to do this, I just need to glue it together.
 - We have too much code, I want less!
 ** Status
 This is all very alpha, and I'm still testing how well this works in practice. Feedback would be very much appreciated though. (A better name would be cool too, since the ~outfn~ macro generates a macro to get the validation before runtime.)
