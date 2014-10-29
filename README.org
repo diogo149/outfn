@@ -240,6 +240,32 @@ By creating a glossary or "concept map", we create a central place for understan
   - determining the lowest cost route from the input to the desired data (assigning cost to each function call)
 - auto-testing : by having multiple ways to solve for the same thing, a test suite can be automatically run to make sure each way returns the same result
   - eg. if there are multiple way to compute the same value, they can all be computed and compared to each other for validation
+** Usage
+Declaring an outfn is of the form:
+#+BEGIN_SRC clojure
+   (defoutfn $NAME $PARAMS
+     $DOCSTRING
+     ([$INPUTS...]
+        $LOGIC)
+     ([$INPUTS...]
+        $LOGIC)
+     ...)
+#+END_SRC
+or
+#+BEGIN_SRC clojure
+   (defoutfn $NAME $PARAMS
+     $DOCSTRING
+     [$INPUTS...]
+     $LOGIC)
+#+END_SRC
+where:
+- $NAME :: Standard function name. A macro is created with the same name.
+- $PARAMS :: An optional map of extra data for the outfn.
+- $DOCSTRING :: A non-optional standard docstring.
+- $INPUTS :: a series of symbols in a vector. Using ~&~ and destructuring is not permitted.
+- $LOGIC :: Standard function implementation.
+
+When calling outfn's, the keywords must be there at macroexpand time to allow for the validation. This means no ~(apply some-outfn [:foo foo])~.
 ** Things to watch out for
 - when multiple matches are possible, but not an exact match, the first declared match is chosen:
   #+BEGIN_SRC clojure
