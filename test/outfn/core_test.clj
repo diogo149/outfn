@@ -2,6 +2,7 @@
   (:require [midje.sweet :refer :all]
             clojure.repl
             [schema.core :as s]
+            [slingshot.slingshot :as ss]
             [outfn.core :refer :all]))
 
 ;; ----------
@@ -203,3 +204,22 @@
 (fact
   "big let problem 2"
   (result) => big-let-block-2)
+
+(defoutfn a {:output :a} "Returns an a" [] (assert false) 42)
+(defoutfn b {:output :b :implicits #{#'a}} "Returns a b" [a] (+ a 16))
+(fact
+  "Implicits error handling"
+  (ss/try+ (b) (catch Object e e))
+  => (contains {:error-time :runtime
+                :outfn-var #'b}))
+
+
+(defoutfn a {:output :a} "Returns an a" [] 42)
+(defoutfn b {:output :b} "Returns a b" [a] (assert false) (+ a 16))
+(defoutfn c {:output :c :implicits #{#'a #'b}} "Returns a c" [a b] (* a b))
+(fact
+  "Implicits error handling 2"
+  (ss/try+ (c) (catch Object e e))
+  => (contains {:error-time :runtime
+                :outfn-var #'c
+                :intermediates [[:a 42]]}))
