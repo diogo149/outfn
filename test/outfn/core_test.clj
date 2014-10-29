@@ -75,7 +75,7 @@
   "macroexpand time validation"
   (eval '(when nil
            (outfn :fo 2)))
-  => (throws Throwable))
+  => (throws Exception))
 
 ;; --------
 ;; glossary
@@ -102,16 +102,14 @@
 
 (fact
   "DRY validation"
-  ;; catch throwable because the prepost-map throws an AssertionError and
-  ;; schema throws an Exception
   (outfn1 :foo :foo) => 3.5
-  (outfn1 :foo 42) => (throws Throwable)
+  (outfn1 :foo 42) => (throws Exception)
   (outfn1 :choo {:a {:b 3}}) => :lochness
-  (outfn1 :choo {:a {:b "3"}}) => (throws Throwable)
+  (outfn1 :choo {:a {:b "3"}}) => (throws Exception)
   (outfn2 :foo :foo) => :hello
-  (outfn2 :foo :bar) => (throws Throwable)
+  (outfn2 :foo :bar) => (throws Exception)
   (outfn2 :choo {:a {:b 3}}) => :world
-  (outfn2 :choo {:a {:b "3"}}) => (throws Throwable))
+  (outfn2 :choo {:a {:b "3"}}) => (throws Exception))
 
 ;; ---------
 ;; implicits

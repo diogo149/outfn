@@ -2,7 +2,8 @@
   (:require [clojure.set :as set]
             [outfn.util :as util]
             [outfn.implicits :as implicits]
-            [outfn.state :as state]))
+            [outfn.state :as state]
+            [slingshot.slingshot :as ss]))
 
 ;; -------------------------
 ;; creation of the functions
@@ -49,6 +50,15 @@
 ;; calling generated functions
 ;; ---------------------------
 
+(defn generate-fn-call
+  [f args extra-data]
+  (let [e (gensym "e")
+        new-extra-data (assoc extra-data :thrown e)]
+    `(ss/try+
+      (~f ~@args)
+      (catch Object ~e
+        (ss/throw+ ~new-extra-data)))))
+
 (defn positional-fn-call
   "Returns the positional arguments for an outfn, if any for the given arg-map"
   [outfn-var input-kws arg-map]
@@ -63,14 +73,17 @@
                              ;; else take the first match
                              (first (filter #(every? input-kws %) input-sets)))]
     (when selected-input-set
-      (let [f (state/get-fn outfn-var selected-input-set)]
+      (let [f (state/get-fn outfn-var selected-input-set)
+            positional-args (map arg-map (sort selected-input-set))]
         ;; this assertion should never fail, because the input sets are keys
         ;; in a map to their respective functions
         (assert f (format "ERROR: outfn not found for %s with keys %s"
                           outfn-var
                           selected-input-set))
         ;; position arguments appropriately
-        (cons f (map arg-map (sort selected-input-set)))))))
+        (generate-fn-call f positional-args {:error-time :runtime
+                                             :outfn-var outfn-var
+                                             :input-keys selected-input-set})))))
 
 (defn var->computations
   [v]
@@ -86,10 +99,15 @@
        :output output-kw})))
 
 (defn build-serial-call
-  [input-kws output-kw computations order arg-map]
-  {:pre [(every? keyword? input-kws)
+  [outfn-var input-kws output-kw computations order arg-map]
+  {:pre [(var? outfn-var)
+         (every? keyword? input-kws)
          (set? input-kws)
-         (map? arg-map)]}
+         (keyword? output-kw)
+         ;; TODO validate computations
+         ;; TODO validate order
+         (map? arg-map)
+         (every? keyword? (keys arg-map))]}
   (let [computation-pair->var (into {}
                                     (for [{:keys [var inputs output]}
                                           computations]
@@ -110,12 +128,31 @@
         (doall (for [kw used-input-kws]
                  [(kw->sym kw) (util/safe-get arg-map kw)]))
 
+        done-outputs (atom [])
+
         computed-let-pairs
         (doall (for [[o-kw i-kws :as pair] order]
-                 [(kw->sym o-kw) (cons (computation-pair->fn pair)
-                                       (->> i-kws
-                                            sort
-                                            (map kw->sym)))]))]
+                 (let [intermediates (for [intermediate-kw @done-outputs]
+                                       [intermediate-kw
+                                        (kw->sym intermediate-kw)])
+                       intermediate-var (computation-pair->var pair)]
+                   (swap! done-outputs conj o-kw)
+                   [;; return the symbol to assign the value to
+                    (kw->sym o-kw)
+                    ;; return the function call corresponding to
+                    (generate-fn-call (computation-pair->fn pair)
+                                      (->> i-kws
+                                           sort
+                                           (map kw->sym))
+                                      ;; lots of debugging information that
+                                      ;; will hopefully come in handy
+                                      {:error-time :runtime
+                                       :outfn-var outfn-var
+                                       :computation-order order
+                                       :intermediate-var intermediate-var
+                                       :computation-step pair
+                                       :input-keys i-kws
+                                       :intermediates intermediates})])))]
     `(let ~(vec (apply concat (concat input-let-pairs computed-let-pairs)))
        ~(kw->sym output-kw))))
 
@@ -145,7 +182,8 @@
         order (implicits/generate-serial-order input-kws
                                                output-kw
                                                computation-graph)]
-    (build-serial-call input-kws
+    (build-serial-call outfn-var
+                       input-kws
                        output-kw
                        available-computations
                        order

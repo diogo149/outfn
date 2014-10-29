@@ -38,7 +38,7 @@
          (generate/generated-fn-call ~outfn-var (or arg-map# {}))
          (catch Object e#
            (ss/throw+ {:thrown e#
-                       :error-time :runtime
+                       :error-time :macroexpand
                        :outfn-name '~outfn-name
                        :arg-map arg-map#})))))
    (catch Object e

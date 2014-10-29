@@ -217,9 +217,9 @@ By creating a glossary or "concept map", we create a central place for understan
                 some-options {:something :something}]
             (filtered-data-outfn :db db :some-options some-options)))
       #+END_SRC
+- free error handling in glue code, which can lead to easier debugging
+  - TODO
 **** Future Benefits of Implicits
-- easier debugging
-  - try-catch can be automatically generated, and all the relevant information can be thrown on an exception
 - optimizations
   - batching (eg. group together DB calls)
   - parallelization (evaluating non-dependent function calls in parallel)
@@ -242,16 +242,18 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- wrap functions with try+-catch
+- test implicit try+-catch
+- test implicit try+-catch intermediates with lazy results
+- test implicits + validation
 - consider outputs in the map for the function being called implicitly, so that params can be cleaner and re-used
 - add usage instructions
   - include possible params and possible glossary params
 - push out 0.1.0
 - validate output when :output param is given
 - implicits improvements
-  - auto add try-catch for implicits with nice error handling
   - function to generate visualize call graph (w/ loom)
   - prismatic graph for parallel evaluation
+- should metadata be used instead of an atom? seems idiomatic/normal and using an atom might have issues with versioning/compiled jars
 - figure out how to add cost
   - should each subfunction have its own cost
     - add metadata to each subfunction
