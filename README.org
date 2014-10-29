@@ -105,8 +105,7 @@ By creating a glossary or "concept map", we create a central place for understan
       ([b] 4)
       ([c d] 5))
 
-    (defoutfn bar-fn {:output :bar
-                      :implicits #{#'foo-fn}}
+    (defoutfn bar-fn {:implicits #{#'foo-fn}}
       "what's up doc"
       [foo] foo)
 
@@ -142,8 +141,7 @@ By creating a glossary or "concept map", we create a central place for understan
     (defoutfn a {:output :a} "Returns an a" [] 42)
     (defoutfn b {:output :b} "Returns a b" [a] (+ a 16))
     (defoutfn c {:output :c} "Returns a c" [a b] (* a b))
-    (defoutfn result {:output :result
-                      :implicits #{#'a #'b #'c}}
+    (defoutfn result {:implicits #{#'a #'b #'c}}
       "Returns the answer"
       [a b c]
       (+ a b c))
@@ -204,8 +202,7 @@ By creating a glossary or "concept map", we create a central place for understan
 
         (def db-calls #{#'data-outfn #'some-other-db-call #'put-all-db-calls-together})
 
-        (defoutfn filtered-data-outfn {:output :filtered-data
-                                       :implicits db-calls}
+        (defoutfn filtered-data-outfn {:implicits db-calls}
           "Returns filtered data"
           [data]
           (let [top-secret-filter identity]
