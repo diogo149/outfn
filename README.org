@@ -242,8 +242,6 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- test implicit try+-catch
-- test implicit try+-catch intermediates with lazy results
 - test implicits + validation
 - consider outputs in the map for the function being called implicitly, so that params can be cleaner and re-used
 - add usage instructions
@@ -285,3 +283,10 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
 ** Probably Won't-s
 - make both docstring and params optional
   - because there can be ambiguity between the params and the functions
+- including the intermeidate value in the error handling of implicits
+  - example
+    - a is implicitly computed
+    - then b is computed with a
+    - but an exception occurs in b
+    - logging the results of a might be helpful in debugging b
+  - this doesn't seem to be able to be done in general because if a contains a lazy value that causes an error or is an infinite seq, then the logging with break with absolutely no information
