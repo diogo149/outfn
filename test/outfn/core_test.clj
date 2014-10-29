@@ -211,8 +211,10 @@
   "Implicits error handling"
   (ss/try+ (b) (catch Object e e))
   => (contains {:error-time :runtime
-                :outfn-var #'b}))
-
+                :outfn-var #'b
+                :computation-order [[:a #{}] [:b #{:a}]]
+                :computation-step [:a #{}]
+                :intermediate-var #'a}))
 
 (defoutfn a {:output :a} "Returns an a" [] 42)
 (defoutfn b {:output :b} "Returns a b" [a] (assert false) (+ a 16))
@@ -221,7 +223,11 @@
   "Implicits error handling 2"
   (ss/try+ (c) (catch Object e e))
   => (contains {:error-time :runtime
-                :outfn-var #'c}))
+                :outfn-var #'c
+                :computation-order [[:a #{}] [:b #{:a}] [:c #{:a :b}]]
+                :computation-step [:b #{:a}]
+                :intermediate-var #'b})
+  (c))
 
 (defoutfn a {:output :a} "Returns an a" [] (map (fn [x] (assert false)) [1]))
 (defoutfn b {:output :b} "Returns a b" [a] (+ a 16))
@@ -230,7 +236,10 @@
   "Implicits error handling w/ lazy intermediate and not evaluating it"
   (ss/try+ (c) (catch Object e e))
   => (contains {:error-time :runtime
-                :outfn-var #'c}))
+                :outfn-var #'c
+                :computation-order [[:a #{}] [:b #{:a}] [:c #{:a :b}]]
+                :computation-step [:b #{:a}]
+                :intermediate-var #'b}))
 
 (defoutfn a {:output :a} "Returns an a" [] (map (fn [x] (assert false)) [1]))
 (defoutfn b {:output :b} "Returns a b" [a] (dorun a))
@@ -239,4 +248,7 @@
   "Implicits error handling w/ lazy intermediate and evaluating it"
   (ss/try+ (c) (catch Object e e))
   => (contains {:error-time :runtime
-                :outfn-var #'c}))
+                :outfn-var #'c
+                :computation-order [[:a #{}] [:b #{:a}] [:c #{:a :b}]]
+                :computation-step [:b #{:a}]
+                :intermediate-var #'b}))
