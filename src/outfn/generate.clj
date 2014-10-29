@@ -144,6 +144,8 @@
                                        :outfn-var outfn-var
                                        :computation-order order
                                        :intermediate-var intermediate-var
+                                       ;; input-keys and computation step
+                                       ;; are somewhat redundant
                                        :computation-step pair
                                        :input-keys i-kws})])))]
     `(let ~(vec (apply concat (concat input-let-pairs computed-let-pairs)))
