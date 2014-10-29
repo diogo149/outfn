@@ -232,7 +232,6 @@ By creating a glossary or "concept map", we create a central place for understan
     ;;  :intermediate-var #'b
     ;;  :computation-step [:b #{:a}]
     ;;  :input-keys #{:a}}
-
   #+END_SRC
 **** Future Benefits of Implicits
 - optimizations
@@ -257,7 +256,6 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- test implicits + validation
 - validate output when :output param is given
   - test it
 - add usage instructions

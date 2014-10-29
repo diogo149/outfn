@@ -205,6 +205,27 @@
   "big let problem 2"
   (result) => big-let-block-2)
 
+;; ----------------------
+;; implicits + validation
+;; ----------------------
+
+(def a-glossary {:q {:validator odd?}})
+
+(defoutfn a {:output :a
+             :glossary a-glossary}
+  "Returns an a"
+  [q]
+  q)
+(defoutfn b {:output :b :implicits #{#'a}} "Returns a b" [a] a)
+(fact
+  "validation with implicits"
+  (a :q 3) => 3
+  (a :q 0) => (throws Exception))
+
+;; --------------------------
+;; implicits + error handling
+;; --------------------------
+
 (defoutfn a {:output :a} "Returns an a" [] (assert false) 42)
 (defoutfn b {:output :b :implicits #{#'a}} "Returns a b" [a] (+ a 16))
 (fact
