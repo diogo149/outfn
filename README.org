@@ -218,7 +218,22 @@ By creating a glossary or "concept map", we create a central place for understan
             (filtered-data-outfn :db db :some-options some-options)))
       #+END_SRC
 - free error handling in glue code, which can lead to easier debugging
-  - TODO
+  #+BEGIN_SRC clojure
+    (defoutfn a {:output :a} "Returns an a" [] 42)
+    (defoutfn b {:output :b} "Returns a b" [a] (assert false) (+ a 16))
+    (defoutfn c {:output :c :implicits #{#'a #'b}} "Returns a c" [a b] (* a b))
+
+    (c)
+    ;; clojure.lang.ExceptionInfo: throw+:
+    ;; {:thrown #<AssertionError>
+    ;;  :error-time :runtime
+    ;;  :outfn-var #'c
+    ;;  :computation-order [[:a #{}] [:b #{:a}] [:c #{:b :a}]]
+    ;;  :intermediate-var #'b
+    ;;  :computation-step [:b #{:a}]
+    ;;  :input-keys #{:a}}
+
+  #+END_SRC
 **** Future Benefits of Implicits
 - optimizations
   - batching (eg. group together DB calls)
@@ -243,16 +258,17 @@ By creating a glossary or "concept map", we create a central place for understan
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
 - test implicits + validation
+- validate output when :output param is given
+  - test it
+- add usage instructions
+  - include possible params and possible glossary params
+- push out 0.1.0
 - consider outputs in the map for the function being called implicitly
   - pros:
     - params look better, and multiple outfn's can use the exact same params
   - cons:
     - can't do output valdiation
     - output seems to belong to the same params as the input (as in it makes sense)
-- add usage instructions
-  - include possible params and possible glossary params
-- push out 0.1.0
-- validate output when :output param is given
 - implicits improvements
   - function to generate visualize call graph (w/ loom)
   - prismatic graph for parallel evaluation
