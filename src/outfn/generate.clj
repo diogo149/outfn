@@ -128,14 +128,12 @@
         (doall (for [kw used-input-kws]
                  [(kw->sym kw) (util/safe-get arg-map kw)]))
 
+        ;; list of output keywords that have already been computed
         done-outputs (atom [])
 
         computed-let-pairs
         (doall (for [[o-kw i-kws :as pair] order]
-                 (let [intermediates (vec (for [intermediate-kw @done-outputs]
-                                            [intermediate-kw
-                                             (kw->sym intermediate-kw)]))
-                       intermediate-var (computation-pair->var pair)]
+                 (let [intermediate-var (computation-pair->var pair)]
                    (swap! done-outputs conj o-kw)
                    [;; return the symbol to assign the value to
                     (kw->sym o-kw)
@@ -151,8 +149,7 @@
                                        :computation-order order
                                        :intermediate-var intermediate-var
                                        :computation-step pair
-                                       :input-keys i-kws
-                                       :intermediates intermediates})])))]
+                                       :input-keys i-kws})])))]
     `(let ~(vec (apply concat (concat input-let-pairs computed-let-pairs)))
        ~(kw->sym output-kw))))
 
