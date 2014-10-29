@@ -256,8 +256,6 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- validate output when :output param is given
-  - test it
 - add usage instructions
   - include possible params and possible glossary params
 - push out 0.1.0
@@ -270,6 +268,11 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
 - implicits improvements
   - function to generate visualize call graph (w/ loom)
   - prismatic graph for parallel evaluation
+- consider default glossary value be a validator if it isn't a map
+  - pros:
+    - cleaner
+  - cons:
+    - more "magic"
 - should metadata be used instead of an atom? seems idiomatic/normal and using an atom might have issues with versioning/compiled jars
 - figure out how to add cost
   - should each subfunction have its own cost

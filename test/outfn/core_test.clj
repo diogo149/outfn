@@ -89,21 +89,24 @@
            [foo])) => (throws Exception))
 
 (def a-glossary {:foo {:validator #(= :foo %)}
-                 :choo {:schema {:a {:b s/Int}}}})
+                 :choo {:schema {:a {:b s/Int}}}
+                 :bar {:validator keyword?}})
 
-(defoutfn outfn1 {:glossary a-glossary}
+(defoutfn outfn1 {:glossary a-glossary
+                  :output :bar}
   "Some outfn"
   ([foo] 3.5)
   ([choo] :lochness))
 
-(defoutfn outfn2 {:glossary a-glossary}
+(defoutfn outfn2 {:glossary a-glossary
+                  :output :bar}
   "Some outfn"
   ([foo] :hello)
   ([choo] :world))
 
 (fact
   "DRY validation"
-  (outfn1 :foo :foo) => 3.5
+  (outfn1 :foo :foo) => (throws Exception) ;; output validation
   (outfn1 :foo 42) => (throws Exception)
   (outfn1 :choo {:a {:b 3}}) => :lochness
   (outfn1 :choo {:a {:b "3"}}) => (throws Exception)
@@ -150,7 +153,6 @@
                          f (* d e)
                          g (dec e)]
                      (+ b d f)))
-
 
 (declare bar-fn)
 (defoutfn foo-fn {:output :foo
@@ -209,7 +211,8 @@
 ;; implicits + validation
 ;; ----------------------
 
-(def a-glossary {:q {:validator odd?}})
+(def a-glossary {:q {:validator odd?}
+                 :a {}})
 
 (defoutfn a {:output :a
              :glossary a-glossary}

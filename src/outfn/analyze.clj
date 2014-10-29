@@ -26,11 +26,14 @@
 
                                    :else
                                    [{} raw-fn-body])
-        prepost-map (update-in raw-prepost-map [:pre] #(or % []))]
+        prepost-map (-> raw-prepost-map
+                        (update-in [:pre] #(or % []))
+                        (update-in [:post] #(or % [])))]
     (assert (= (count raw-args) (count arg-set))
             (format "Non unique function argument in: %s" raw-args))
-    (assert (vector? (:pre prepost-map))
-            (format "Prepost-map %s doesn't have vector for :pre"
+    (assert (and (vector? (:pre prepost-map))
+                 (vector? (:post prepost-map)))
+            (format "Prepost-map %s doesn't have vector for :pre or :post"
                     prepost-map))
     {:arg-set arg-set
      :input-kws input-kws
