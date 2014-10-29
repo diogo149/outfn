@@ -261,9 +261,11 @@ or
 where:
 - $NAME :: Standard function name. A macro is created with the same name.
 - $PARAMS :: An optional map of extra data for the outfn, with the following optional keys:
-  - glossary :: TODO
-  - implicits :: TODO
-  - output :: TODO
+  - :glossary :: A function that takes in a keyword and returns a map with the following optional keys:
+    - :validator :: a validation function that the concept corresponding to the keyword must follow
+    - :schema :: a [[https://github.com/Prismatic/schema][Prismatic/schema]] for the concept to follow
+  - :output :: A keyword specifying the output of the outfn. It is used for both validation with the glossary and knowing the output for an implicit call.
+  - :implicits :: A set of vars of the outfn's that can be implicitly chained together in order to create the necessary input for the current outfn.
 - $DOCSTRING :: A non-optional standard docstring.
 - $INPUTS :: a series of symbols in a vector. Using ~&~ and destructuring is not permitted.
 - $LOGIC :: Standard function implementation.
