@@ -226,8 +226,7 @@
                 :outfn-var #'c
                 :computation-order [[:a #{}] [:b #{:a}] [:c #{:a :b}]]
                 :computation-step [:b #{:a}]
-                :intermediate-var #'b})
-  (c))
+                :intermediate-var #'b}))
 
 (defoutfn a {:output :a} "Returns an a" [] (map (fn [x] (assert false)) [1]))
 (defoutfn b {:output :b} "Returns a b" [a] (+ a 16))
