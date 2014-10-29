@@ -98,6 +98,24 @@
        :var v
        :output output-kw})))
 
+(defn output-var->computations
+  [v]
+  {:pre [(var? v)]
+   ;; TODO validate computation
+   }
+  (let [common-data-map (state/get-common-data v)
+        output-kw (or (:output common-data-map)
+                      ;; this allows the output key to be optional and
+                      ;; implicits to still work
+                      ::output)
+        input-sets (state/get-input-sets v)]
+    (for [input-set input-sets]
+      {:inputs input-set
+       :var v
+       :output output-kw})))
+
+
+
 (defn build-serial-call
   [outfn-var input-kws output-kw computations order arg-map]
   {:pre [(var? outfn-var)
@@ -164,13 +182,15 @@
                   (format "Invalid set of keys %s for %s"
                           input-kws
                           outfn-var))
-        implicits-var-set (conj (util/safe-get common-data-map :implicits)
-                                outfn-var)
-        output-kw (->> (var->computations outfn-var) first :output)
+        implicits-var-set (util/safe-get common-data-map :implicits)
+        output-computations (output-var->computations outfn-var)
+        output-kw (->> output-computations first :output)
         _ (assert (keyword? output-kw))
         ;; TODO dedupe computations with the same input and output, select
         ;; the cheapest
-        available-computations (mapcat var->computations implicits-var-set)
+        available-computations (concat (mapcat var->computations
+                                               implicits-var-set)
+                                       output-computations)
         computation-graph (implicits/compute-implicits input-kws
                                                        output-kw
                                                        available-computations)

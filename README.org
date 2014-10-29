@@ -261,11 +261,11 @@ or
 where:
 - $NAME :: Standard function name. A macro is created with the same name.
 - $PARAMS :: An optional map of extra data for the outfn, with the following optional keys:
+  - :output :: A keyword specifying the output of the outfn. It is used for both validation with the glossary and knowing the output for an implicit call.
+  - :implicits :: A set of vars of the outfn's that can be implicitly chained together in order to create the necessary input for the current outfn.
   - :glossary :: A function that takes in a keyword and returns a map with the following optional keys:
     - :validator :: a validation function that the concept corresponding to the keyword must follow
     - :schema :: a [[https://github.com/Prismatic/schema][Prismatic/schema]] for the concept to follow
-  - :output :: A keyword specifying the output of the outfn. It is used for both validation with the glossary and knowing the output for an implicit call.
-  - :implicits :: A set of vars of the outfn's that can be implicitly chained together in order to create the necessary input for the current outfn.
 - $DOCSTRING :: A non-optional standard docstring.
 - $INPUTS :: a series of symbols in a vector. Using ~&~ and destructuring is not permitted.
 - $LOGIC :: Standard function implementation.
@@ -286,7 +286,6 @@ where:
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- make :output optional if :implicits are given
 - push out 0.1.0
 - consider outputs in the map for the function being called implicitly
   - pros:
@@ -313,6 +312,8 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
     - somehow get the macro version working
     - non-macro version
 - consider implicit transitivity (can call implicits of functions that can be called implicitly)
+  - seems like it could be a bad idea because it can lead to really big graphs (making finding the best path slow) and difficulty to understand what is going on
+- allow destructuring in outfn calls if :as is given
 - better implicits algorithm
   - problem: how to find the optimal set of calls
     - there is an exponential number of states relative to the number of concepts

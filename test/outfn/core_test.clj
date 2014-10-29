@@ -125,8 +125,7 @@
   ([b] 4)
   ([c d] 5))
 
-(defoutfn bar-fn {:output :bar
-                  :implicits #{#'foo-fn}}
+(defoutfn bar-fn {:implicits #{#'foo-fn}}
   "what's up doc"
   [foo] foo)
 
