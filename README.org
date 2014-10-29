@@ -291,6 +291,7 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
   - cons:
     - can't do output valdiation
     - output seems to belong to the same params as the input (as in it makes sense)
+- consider special syntax for calls with implicits, to make the intention clear
 - implicits improvements
   - function to generate visualize call graph (w/ loom)
   - prismatic graph for parallel evaluation
