@@ -286,7 +286,6 @@ where:
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
-- push out 0.1.0
 - consider outputs in the map for the function being called implicitly
   - pros:
     - params look better, and multiple outfn's can use the exact same params
