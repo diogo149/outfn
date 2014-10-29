@@ -297,7 +297,7 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
 - implicits improvements
   - function to generate visualize call graph (w/ loom)
   - prismatic graph for parallel evaluation
-- consider default glossary value be a validator if it isn't a map
+- consider default glossary value to be a validator if it isn't a map
   - pros:
     - cleaner
   - cons:
