@@ -5,7 +5,7 @@ If you've thought to yourself any of the following, read on:
 - What is this function and what do the arguments mean?
 - I want to name these functions the same thing, because they do the same thing!
 - If only this function's arguments were in a different order, I could use a threading macro.
-- I wish my code failed faster when I have a typo or refactoring error.
+- I wish my code failed faster when I have a typo or refactoring error with static validation.
 - I want validated code, but without writing validation code.
 - We need one single place in the code that a new person could read and understand all the data that passes through.
 - Why did you name these things the exact same thing??? That's not what it means.
@@ -241,6 +241,10 @@ By creating a glossary or "concept map", we create a central place for understan
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
+- wrap functions with try+-catch
+- consider outputs in the map for the function being called implicitly, so that params can be cleaner and re-used
+- add usage instructions
+  - include possible params and possible glossary params
 - push out 0.1.0
 - common-data-map validation
   - if contains :implicits, must contain :output
@@ -255,8 +259,10 @@ To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command lin
     - add metadata to each subfunction
       - eg. cost to have implicits find the lowest cost route to get an answer
   - should the toplevel outfn have a cost
-- add non-macro version
-  - for clojurescript compatibility
+- clojurescript compatibility
+  - possibilities
+    - somehow get the macro version working
+    - non-macro version
 - use something like defnk to make validation DRY
 - consider implicit transitivity (can call implicits of functions that can be called implicitly)
 - better implicits algorithm
