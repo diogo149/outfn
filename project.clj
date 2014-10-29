@@ -1,4 +1,4 @@
-(defproject outfn "0.1.0"
+(defproject outfn "0.2.0-SNAPSHOT"
   :description "A macro for clearer, more declarative functions."
   :url "https://github.com/diogo149/outfn"
   :license {:name "Eclipse Public License"
