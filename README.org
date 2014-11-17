@@ -285,6 +285,7 @@ where:
 ** Development
 To run tests, perform ~lein midje~ or ~lein midje :autotest~ for the command line.
 ** TODOs
+- separate implicits from outfn definition
 - consider outputs in the map for the function being called implicitly
   - pros:
     - params look better, and multiple outfn's can use the exact same params
